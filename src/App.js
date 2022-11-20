@@ -10,7 +10,7 @@ import awsconfig from './aws-config';
 I18n.setLanguage('es');
 const dict = {
   es: {
-    'Sign in': 'Registrarse',
+    'Sign in': 'Iniciar Sesión',
     'Forgot your password?': 'Olvido su contraseña?',
     'Enter your Email': 'Ingrese su email',
     'Enter your Password': 'Ingrese su password'

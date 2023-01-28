@@ -66,7 +66,7 @@ function SidebarTopSection() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useAuth();
+  const { user={}, logout={} } = useAuth();
 
   const ref = useRef(null);
   const [isOpen, setOpen] = useState(false);

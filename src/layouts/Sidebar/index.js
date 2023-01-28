@@ -13,7 +13,7 @@ import {
   darken
 } from '@mui/material';
 
-import SidebarTopSection from './SidebarTopSection';
+// import SidebarTopSection from './SidebarTopSection';
 import SidebarMenu from './SidebarMenu';
 import SidebarFooter from './SidebarFooter';
 import Logo from 'src/components/LogoSign';
@@ -72,7 +72,7 @@ function Sidebar() {
               background: theme.colors.alpha.trueWhite[10]
             }}
           />
-          <SidebarTopSection />
+          {/* <SidebarTopSection /> */}
           <Divider
             sx={{
               my: theme.spacing(3),
@@ -125,7 +125,7 @@ function Sidebar() {
                 background: theme.colors.alpha.trueWhite[10]
               }}
             />
-            <SidebarTopSection />
+            {/* <SidebarTopSection /> */}
             <Divider
               sx={{
                 my: theme.spacing(3),

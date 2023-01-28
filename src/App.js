@@ -41,7 +41,7 @@ const dict = {
 
 I18n.putVocabularies(dict);
 
-Amplify.configure(awsconfig);
+// Amplify.configure(awsconfig);
 
 
 // export declare type FormFieldComponents = 'signIn' | 'signUp' | 'forceNewPassword' | 'confirmResetPassword' | 'confirmSignIn' | 'confirmSignUp' | 'confirmVerifyUser' | 'resetPassword' | 'setupTOTP';
@@ -58,7 +58,6 @@ export default function App() {
   return (
     <ThemeProvider>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-
       <SnackbarProvider
           maxSnack={6}
           anchorOrigin={{
@@ -79,7 +78,8 @@ export default function App() {
               <button onClick={signOut}>Cerrar Sesión</button>
             </main>
           )}
-        </Authenticator> */}
+        </Authenticator> */} 
+  
                 <SidebarLayout />
         </SnackbarProvider>
       </LocalizationProvider>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Amplify, Auth } from 'aws-amplify';
 import amplifyConfig from '../aws-config';
 
-Amplify.configure(amplifyConfig);
+// Amplify.configure(amplifyConfig);
 
 const initialAuthState = {
   isAuthenticated: false,

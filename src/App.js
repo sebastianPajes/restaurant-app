@@ -1,11 +1,18 @@
 import './App.css';
 
+import { CssBaseline } from '@mui/material';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+
 import { Amplify, I18n } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
+import { SnackbarProvider } from 'notistack';
 import '@aws-amplify/ui-react/styles.css';
 
-
 import awsconfig from './aws-config';
+import ThemeProvider from './theme/ThemeProvider';
+import SidebarLayout from './layouts';
+
 
 I18n.setLanguage('es');
 const dict = {
@@ -49,17 +56,33 @@ Amplify.configure(awsconfig);
 
 export default function App() {
   return (
-    <Authenticator 
-    // formFields={formFields}
-    variation='modal'
-    loginMechanisms={['email']}
-    hideSignUp={true} >
-      {({ signOut, user }) => (
-        <main>
-          <h1>Codigo de usuario: {user.username}</h1>
-          <button onClick={signOut}>Cerrar Sesión</button>
-        </main>
-      )}
-    </Authenticator>
+    <ThemeProvider>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+
+      <SnackbarProvider
+          maxSnack={6}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right'
+          }}
+        >
+        <CssBaseline />
+
+        {/* <Authenticator 
+        // formFields={formFields}
+        variation='modal'
+        loginMechanisms={['email']}
+        hideSignUp={true} >
+          {({ signOut, user }) => (
+            <main>
+              <h1>Codigo de usuario: {user.username}</h1>
+              <button onClick={signOut}>Cerrar Sesión</button>
+            </main>
+          )}
+        </Authenticator> */}
+                <SidebarLayout />
+        </SnackbarProvider>
+      </LocalizationProvider>
+    </ThemeProvider>
   );
 }

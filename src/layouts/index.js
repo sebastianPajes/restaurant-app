@@ -1,6 +1,5 @@
 import { Box, alpha, lighten, useTheme } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import ThemeSettings from 'src/components/ThemeSettings';
 
 import Sidebar from './Sidebar';
 
@@ -35,7 +34,7 @@ const SidebarLayout = () => {
         }
       }}
     >
-      a
+      
       <Sidebar />
       <Box
         sx={{
@@ -52,7 +51,6 @@ const SidebarLayout = () => {
         <Box display="block">
           <Outlet />
         </Box>
-        <ThemeSettings />
       </Box>
     </Box>
   );

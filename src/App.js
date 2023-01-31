@@ -1,8 +1,7 @@
-import './App.css';
-
 import { CssBaseline } from '@mui/material';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { useRoutes } from 'react-router-dom';
 
 import { Amplify, I18n } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
@@ -12,6 +11,7 @@ import '@aws-amplify/ui-react/styles.css';
 import awsconfig from './aws-config';
 import ThemeProvider from './theme/ThemeProvider';
 import SidebarLayout from './layouts';
+import router from 'src/router';
 
 
 I18n.setLanguage('es');
@@ -55,6 +55,8 @@ I18n.putVocabularies(dict);
 // }
 
 export default function App() {
+  const content = useRoutes(router);
+  // const auth = useAuth();
   return (
     <ThemeProvider>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -67,7 +69,8 @@ export default function App() {
         >
         <CssBaseline />
 
-        {/* <Authenticator 
+        {true ? content :
+      (<Authenticator 
         // formFields={formFields}
         variation='modal'
         loginMechanisms={['email']}
@@ -78,7 +81,7 @@ export default function App() {
               <button onClick={signOut}>Cerrar Sesión</button>
             </main>
           )}
-        </Authenticator> */} 
+        </Authenticator>)} 
   
                 <SidebarLayout />
         </SnackbarProvider>

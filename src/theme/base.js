@@ -1,17 +1,8 @@
 import { PureLightTheme } from './schemes/PureLightTheme';
-import { GreyGooseTheme } from './schemes/GreyGooseTheme';
-import { NebulaFighterTheme } from './schemes/NebulaFighterTheme';
-import { DarkSpacesTheme } from './schemes/DarkSpacesTheme';
-import { PurpleFlowTheme } from './schemes/PurpleFlowTheme';
-import { GreenFieldsTheme } from './schemes/GreenFieldsTheme';
+
 
 const themeMap = {
-  PureLightTheme,
-  GreyGooseTheme,
-  PurpleFlowTheme,
-  NebulaFighterTheme,
-  DarkSpacesTheme,
-  GreenFieldsTheme
+  PureLightTheme
 };
 
 export function themeCreator(theme) {

@@ -66,7 +66,7 @@ export const AuthProvider = (props) => {
     const initialize = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
-
+        console.log(JSON.stringify(user))
         dispatch({
           type: 'INITIALIZE',
           payload: {

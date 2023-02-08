@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Amplify, Auth } from 'aws-amplify';
 import amplifyConfig from '../aws-config';
 
-// Amplify.configure(amplifyConfig);
+Amplify.configure(amplifyConfig);
 
 const initialAuthState = {
   isAuthenticated: false,
@@ -73,17 +73,11 @@ export const AuthProvider = (props) => {
             isAuthenticated: true,
             user: {
               id: user.sub,
-              jobtitle: 'Lead Developer',
-              avatar: user.picture,
               email: user.email,
               name: user.name,
               role: user.role,
               location: user.location,
               username: user.username,
-              posts: user.posts,
-              coverImg: user.coverImg,
-              followers: user.followers,
-              description: user.description
             }
           }
         });
@@ -114,17 +108,11 @@ export const AuthProvider = (props) => {
       payload: {
         user: {
           id: user.sub,
-          jobtitle: 'Lead Developer',
-          avatar: user.picture,
           email: user.email,
           name: user.name,
           role: user.role,
           location: user.location,
           username: user.username,
-          posts: user.posts,
-          coverImg: user.coverImg,
-          followers: user.followers,
-          description: user.description
         }
       }
     });

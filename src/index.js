@@ -7,6 +7,7 @@ import './index.css';
 import App from './App';
 import { SidebarProvider } from './contexts/SidebarContext';
 import ScrollTop from './hooks/useScrollTop';
+import { AuthProvider } from 'src/contexts/AmplifyContext';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -16,7 +17,9 @@ ReactDOM.render(
       <SidebarProvider>
         <BrowserRouter>
           <ScrollTop />
+          <AuthProvider>
             <App />
+          </AuthProvider>
         </BrowserRouter>
       </SidebarProvider>
     {/* </Provider> */}

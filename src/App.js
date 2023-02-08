@@ -2,12 +2,13 @@ import { CssBaseline } from '@mui/material';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { useRoutes } from 'react-router-dom';
-
 import { Amplify, I18n } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import { SnackbarProvider } from 'notistack';
 import '@aws-amplify/ui-react/styles.css';
 
+
+import useAuth from 'src/hooks/useAuth';
 import awsconfig from './aws-config';
 import ThemeProvider from './theme/ThemeProvider';
 import SidebarLayout from './layouts';
@@ -41,9 +42,6 @@ const dict = {
 
 I18n.putVocabularies(dict);
 
-// Amplify.configure(awsconfig);
-
-
 // export declare type FormFieldComponents = 'signIn' | 'signUp' | 'forceNewPassword' | 'confirmResetPassword' | 'confirmSignIn' | 'confirmSignUp' | 'confirmVerifyUser' | 'resetPassword' | 'setupTOTP';
 
 // const formFields = {
@@ -56,7 +54,7 @@ I18n.putVocabularies(dict);
 
 export default function App() {
   const content = useRoutes(router);
-  // const auth = useAuth();
+  const auth = useAuth();
   return (
     <ThemeProvider>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -68,8 +66,7 @@ export default function App() {
           }}
         >
         <CssBaseline />
-
-        {true ? content :
+        {auth.isInitialized ? content :
       (<Authenticator 
         // formFields={formFields}
         variation='modal'
@@ -82,8 +79,6 @@ export default function App() {
             </main>
           )}
         </Authenticator>)} 
-  
-                <SidebarLayout />
         </SnackbarProvider>
       </LocalizationProvider>
     </ThemeProvider>

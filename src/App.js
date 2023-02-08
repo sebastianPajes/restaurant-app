@@ -66,6 +66,7 @@ export default function App() {
           }}
         >
         <CssBaseline />
+        {console.log(auth)}
         {auth.isInitialized ? content :
       (<Authenticator 
         // formFields={formFields}

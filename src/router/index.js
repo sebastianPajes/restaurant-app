@@ -1,4 +1,4 @@
-// import Authenticated from 'src/components/Authenticated';
+import Authenticated from 'src/components/Authenticated';
 // import { Navigate } from 'react-router-dom';
 
 import SidebarLayout from 'src/layouts/';
@@ -9,9 +9,9 @@ const router = [
   {
     path: '',
     element: (
-      // <Authenticated>
+      <Authenticated>
         <SidebarLayout />
-      // </Authenticated>
+      </Authenticated>
     ),
     children: [
       {

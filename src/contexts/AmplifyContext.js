@@ -95,24 +95,16 @@ export const AuthProvider = (props) => {
     initialize();
   }, []);
 
-  const login = async (email, password) => {
-    const user = await Auth.signIn(email, password);
-
-    if (user.challengeName) {
-      console.error(`Can't login, "${user.challengeName}" failed.`);
-      return;
-    }
-
+  const login = async (user) => {
     dispatch({
       type: 'LOGIN',
       payload: {
         user: {
           id: user.sub,
           email: user.email,
-          name: user.name,
-          role: user.role,
-          location: user.location,
-          username: user.username,
+          password:user.password,
+          // role: user.role,
+          // location: user.location,
         }
       }
     });

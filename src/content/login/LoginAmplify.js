@@ -1,11 +1,9 @@
-
+import { useEffect} from 'react';
 import { Amplify, I18n } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 
 
 import useAuth from 'src/hooks/useAuth';
-
-
 
 
 I18n.setLanguage('es');
@@ -36,25 +34,33 @@ const dict = {
 I18n.putVocabularies(dict);
 
 
-export default function LoginAmplify() {
-    const { login } = useAuth();
-
-
+export function Login({ signOut, user }){
+  const { login } = useAuth();
+  
+  useEffect(()=>{
     const handleSignIn = async(user)=>{
-        await login(user);
+      await login(user);
     }
+  
+    handleSignIn(user)
+  },[])
+
+  return (<main>
+  <h1>Codigo de usuario: {user.username}</h1>
+  <button onClick={signOut}>Cerrar Sesión</button>
+  </main>)
+}
+    
+
+
+
+export default function LoginAmplify() {
     return (<Authenticator 
     // formFields={formFields}
     variation='modal'
     loginMechanisms={['email']}
     hideSignUp={true} >
-    {({ signOut, user }) => (
-        <main>
-        <h1>Codigo de usuario: {user.username}</h1>
-        <button onClick={signOut}>Cerrar Sesión</button>
-        {()=>handleSignIn(user)}
-        </main>
-    )}
+      <Login></Login>
     </Authenticator>)
 
 }

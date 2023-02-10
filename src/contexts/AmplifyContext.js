@@ -96,6 +96,7 @@ export const AuthProvider = (props) => {
   }, []);
 
   const login = async (user) => {
+    console.log(user);
     dispatch({
       type: 'LOGIN',
       payload: {

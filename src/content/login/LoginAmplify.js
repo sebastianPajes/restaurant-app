@@ -52,7 +52,7 @@ export default function LoginAmplify() {
         <main>
         <h1>Codigo de usuario: {user.username}</h1>
         <button onClick={signOut}>Cerrar Sesión</button>
-        {handleSignIn(user)}
+        {()=>handleSignIn(user)}
         </main>
     )}
     </Authenticator>)

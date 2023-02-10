@@ -60,7 +60,7 @@ export default function LoginAmplify() {
     variation='modal'
     loginMechanisms={['email']}
     hideSignUp={true} >
-      <Login></Login>
+       {({ signOut, user }) => (<Login signOut={signOut} user={user}></Login>)}
     </Authenticator>)
 
 }

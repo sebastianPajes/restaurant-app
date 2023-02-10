@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useAuth from 'src/hooks/useAuth';
-import Login from 'src/content/login/LoginAmplify';
+import LoginAmplify from 'src/content/login/LoginAmplify';
 
 const Authenticated = (props) => {
   const { children } = props;
@@ -14,7 +14,7 @@ const Authenticated = (props) => {
     if (location.pathname !== requestedLocation) {
       setRequestedLocation(location.pathname);
     }
-    return <Login />;
+    return <LoginAmplify />;
   }
 
   if (requestedLocation && location.pathname !== requestedLocation) {

@@ -45,14 +45,9 @@ export function Login({ signOut, user }){
     handleSignIn(user)
   },[])
 
-  return (<main>
-  <h1>Codigo de usuario: {user.username}</h1>
-  <button onClick={signOut}>Cerrar Sesión</button>
-  </main>)
+  return null;
 }
     
-
-
 
 export default function LoginAmplify() {
     return (<Authenticator 

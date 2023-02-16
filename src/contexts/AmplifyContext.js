@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer } from 'react';
-import axios from 'src/utils/axios';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import {Amplify, Auth } from 'aws-amplify';
 import amplifyConfig from '../aws-config';

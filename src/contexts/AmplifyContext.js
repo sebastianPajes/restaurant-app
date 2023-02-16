@@ -100,15 +100,15 @@ export const AuthProvider = (props) => {
     console.log("login:",user);
     console.log("token: ",`Bearer ${user.signInUserSession.idToken.jwtToken}`);
     
-    const {response} = await axios.get(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees/${user.username}`,
+    const {employeeRes} = await axios.get(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees/${user.username}`,
     {
       headers: {
         Authorization : `Bearer ${user.signInUserSession.idToken.jwtToken}`
         }
       }
     );
-    console.log(response);
-    const {employeeRes} = response.data;
+    console.log(employeeRes);
+    // const {employeeRes} = response.data;
     dispatch({
       type: 'LOGIN',
       payload: {

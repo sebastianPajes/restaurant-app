@@ -1,4 +1,5 @@
 import { createContext, useEffect, useReducer } from 'react';
+import axios from 'src/utils/axios';
 import PropTypes from 'prop-types';
 import {Amplify, Auth } from 'aws-amplify';
 import amplifyConfig from '../aws-config';
@@ -62,41 +63,42 @@ export const AuthProvider = (props) => {
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialAuthState);
 
-  useEffect(() => {
-    const initialize = async () => {
-      try {
-        const user = await Auth.currentAuthenticatedUser();
-        console.log(JSON.stringify(user))
-        dispatch({
-          type: 'INITIALIZE',
-          payload: {
-            isAuthenticated: true,
-            user: {
-              id: user.sub,
-              email: user.email,
-              name: user.name,
-              role: user.role,
-              location: user.location,
-              username: user.username,
-            }
-          }
-        });
-      } catch (error) {
-        dispatch({
-          type: 'INITIALIZE',
-          payload: {
-            isAuthenticated: false,
-            user: null
-          }
-        });
-      }
-    };
+  // useEffect(() => {
+  //   const initialize = async () => {
+  //     try {
+  //       const user = await Auth.currentAuthenticatedUser();
+  //       console.log("initialize:",user);
+  //       dispatch({
+  //         type: 'INITIALIZE',
+  //         payload: {
+  //           isAuthenticated: true,
+  //           user: {
+  //             id: user.sub,
+  //             email: user.email,
+  //             name: user.name,
+  //             role: user.role,
+  //             location: user.location,
+  //             username: user.username,
+  //           }
+  //         }
+  //       });
+  //     } catch (error) {
+  //       dispatch({
+  //         type: 'INITIALIZE',
+  //         payload: {
+  //           isAuthenticated: false,
+  //           user: null
+  //         }
+  //       });
+  //     }
+  //   };
 
-    initialize();
-  }, []);
+  //   initialize();
+  // }, []);
 
   const login = async (user) => {
-    console.log(user);
+    console.log("login:",user);
+     const {employeeRes} = axios.get(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees/${user.username}`);
     dispatch({
       type: 'LOGIN',
       payload: {
@@ -104,11 +106,13 @@ export const AuthProvider = (props) => {
           id: user.sub,
           email: user.email,
           password:user.password,
-          // role: user.role,
-          // location: user.location,
+          locationId: employeeRes.locationId,
+          firstName: employeeRes.firstName,
+          lastName: employeeRes.lastName
         }
       }
     });
+
   };
 
   const logout = async () => {

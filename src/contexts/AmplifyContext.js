@@ -98,16 +98,15 @@ export const AuthProvider = (props) => {
 
   const login = async (user) => {
     console.log("login:",user);
-    const {response} = axios.get(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees/${user.username}`);
+    const {response} = await axios.get(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees/${user.attributes.username}`);
     console.log(response);
     const {employeeRes} = response.data;
     dispatch({
       type: 'LOGIN',
       payload: {
         user: {
-          id: user.sub,
-          email: user.email,
-          password:user.password,
+          id: user.attributes.sub,
+          email: user.attributes.email,
           locationId: employeeRes.locationId,
           firstName: employeeRes.firstName,
           lastName: employeeRes.lastName

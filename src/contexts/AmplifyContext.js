@@ -109,18 +109,18 @@ export const AuthProvider = (props) => {
     );
     console.log("aer: ", aer);
     // const {employeeRes} = response.data;
-    dispatch({
-      type: 'LOGIN',
-      payload: {
-        user: {
-          id: user.attributes.sub,
-          email: user.attributes.email,
-          locationId: employeeRes.locationId,
-          firstName: employeeRes.firstName,
-          lastName: employeeRes.lastName
-        }
-      }
-    });
+    // dispatch({
+    //   type: 'LOGIN',
+    //   payload: {
+    //     user: {
+    //       id: user.attributes.sub,
+    //       email: user.attributes.email,
+    //       locationId: employeeRes.locationId,
+    //       firstName: employeeRes.firstName,
+    //       lastName: employeeRes.lastName
+    //     }
+    //   }
+    // });
 
   };
 

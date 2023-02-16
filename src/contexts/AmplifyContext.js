@@ -100,27 +100,26 @@ export const AuthProvider = (props) => {
     console.log("login:",user);
     console.log("token: ",`Bearer ${user.signInUserSession.idToken.jwtToken}`);
     
-    const aer = await axios.get(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees/${user.username}`,
+    const response = await axios.get(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees/${user.username}`,
     {
       headers: {
         Authorization : `Bearer ${user.signInUserSession.idToken.jwtToken}`
         }
       }
     );
-    console.log("aer: ", aer);
-    // const {employeeRes} = response.data;
-    // dispatch({
-    //   type: 'LOGIN',
-    //   payload: {
-    //     user: {
-    //       id: user.attributes.sub,
-    //       email: user.attributes.email,
-    //       locationId: employeeRes.locationId,
-    //       firstName: employeeRes.firstName,
-    //       lastName: employeeRes.lastName
-    //     }
-    //   }
-    // });
+    const employeeRes = response.data;
+    dispatch({
+      type: 'LOGIN',
+      payload: {
+        user: {
+          id: user.attributes.sub,
+          email: user.attributes.email,
+          locationId: employeeRes.locationId,
+          firstName: employeeRes.firstName,
+          lastName: employeeRes.lastName
+        }
+      }
+    });
 
   };
 

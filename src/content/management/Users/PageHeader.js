@@ -163,6 +163,7 @@ function PageHeader() {
           ) => {
             try {
               const {idToken} = await Auth.currentSession();
+              console.log("user =>", user);
               const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees`,
               {
                 locationId: user.locationId,
@@ -170,6 +171,7 @@ function PageHeader() {
                 password: _values.password,
                 phone: _values.phone,
                 firstName: _values.first_name,
+                aea:undefined,
                 lastName: _values.last_name
               },
               {
@@ -281,7 +283,7 @@ function PageHeader() {
                           variant="outlined"
                         />
                       </Grid>
-                      <Grid item xs={12} md={6}>
+                      {/* <Grid item xs={12} md={6}>
                         <Autocomplete
                           disablePortal
                           options={roles}
@@ -293,7 +295,7 @@ function PageHeader() {
                             />
                           )}
                         />
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   </Grid>
                 </Grid>

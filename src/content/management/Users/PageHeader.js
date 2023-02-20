@@ -100,7 +100,7 @@ function PageHeader() {
   };
 
   const handleCreateUserSuccess = () => {
-    enqueueSnackbar(t('The user account was created successfully'), {
+    enqueueSnackbar('El empleado fue creado exitosamente', {
       variant: 'success',
       anchorOrigin: {
         vertical: 'top',
@@ -274,7 +274,7 @@ function PageHeader() {
                           fullWidth
                           margin="normal"
                           helperText={touched.phone && errors.phone}
-                          label={t('Phone')}
+                          label="Teléfono"
                           name="phone"
                           onBlur={handleBlur}
                           onChange={handleChange}

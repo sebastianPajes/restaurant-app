@@ -164,14 +164,14 @@ function PageHeader() {
             try {
               const {idToken} = await Auth.currentSession();
               console.log("user =>", user);
+              const locationIdS = localStorage.getItem('locationId');
               const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees`,
               {
-                locationId: user.locationId,
+                locationId: locationIdS,
                 email: _values.email,
                 password: _values.password,
                 phone: _values.phone,
                 firstName: _values.first_name,
-                aea:undefined,
                 lastName: _values.last_name
               },
               {

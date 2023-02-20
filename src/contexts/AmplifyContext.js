@@ -115,7 +115,9 @@ export const AuthProvider = (props) => {
         }
       }
     });
-
+    localStorage.setItem('locationId',employeeRes.locationId);
+    localStorage.setItem('firstName',employeeRes.firstName);
+    localStorage.setItem('lastName',employeeRes.lastName);
   };
 
   const logout = async () => {

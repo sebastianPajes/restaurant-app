@@ -6,7 +6,6 @@ import { SnackbarProvider } from 'notistack';
 import '@aws-amplify/ui-react/styles.css';
 
 
-import awsconfig from './aws-config';
 import ThemeProvider from './theme/ThemeProvider';
 import router from 'src/router';
 

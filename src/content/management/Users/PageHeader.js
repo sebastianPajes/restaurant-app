@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import useAuth from 'src/hooks/useAuth';
-
+import { Auth } from 'aws-amplify';
 import {
   styled,
   Grid,
@@ -162,6 +162,7 @@ function PageHeader() {
             { resetForm, setErrors, setStatus, setSubmitting }
           ) => {
             try {
+              const {idToken} = await Auth.currentSession();
               const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees`,
               {
                 locationId: user.locationId,
@@ -173,7 +174,7 @@ function PageHeader() {
               },
               {
                 headers: {
-                  Authorization : `Bearer ${user.signInUserSession.idToken.jwtToken}`
+                  Authorization : `Bearer ${idToken.jwtToken}`
                   }
                 }
               );

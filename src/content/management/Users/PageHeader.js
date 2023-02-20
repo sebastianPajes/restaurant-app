@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import wait from 'src/utils/wait';
+import axios from 'axios';
 import useAuth from 'src/hooks/useAuth';
 
 import {
@@ -154,6 +154,7 @@ function PageHeader() {
             first_name: '',
             last_name: '',
             password: '',
+            phone:'',
             submit: null
           }}
           onSubmit={async (
@@ -162,6 +163,14 @@ function PageHeader() {
           ) => {
             try {
               const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees`,
+              {
+                locationId: user.locationId,
+                email: _values.email,
+                password: _values.password,
+                phone: _values.phone,
+                firstName: _values.first_name,
+                lastName: _values.last_name
+              },
               {
                 headers: {
                   Authorization : `Bearer ${user.signInUserSession.idToken.jwtToken}`
@@ -253,6 +262,21 @@ function PageHeader() {
                           onChange={handleChange}
                           type="password"
                           value={values.password}
+                          variant="outlined"
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          error={Boolean(touched.phone && errors.phone)}
+                          fullWidth
+                          margin="normal"
+                          helperText={touched.phone && errors.phone}
+                          label={t('Phone')}
+                          name="phone"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          type="phone"
+                          value={values.phone}
                           variant="outlined"
                         />
                       </Grid>

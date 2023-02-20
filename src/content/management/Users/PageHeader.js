@@ -161,7 +161,13 @@ function PageHeader() {
             { resetForm, setErrors, setStatus, setSubmitting }
           ) => {
             try {
-              await wait(1000);
+              const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/employees`,
+              {
+                headers: {
+                  Authorization : `Bearer ${user.signInUserSession.idToken.jwtToken}`
+                  }
+                }
+              );
               resetForm();
               setStatus({ success: true });
               setSubmitting(false);
@@ -273,7 +279,7 @@ function PageHeader() {
                 }}
               >
                 <Button color="secondary" onClick={handleCreateUserClose}>
-                  {t('Cancel')}
+                  Cancelar
                 </Button>
                 <Button
                   type="submit"

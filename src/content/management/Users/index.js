@@ -17,10 +17,10 @@ function ManagementUsers() {
 
   const getUsers = useCallback(async () => {
     try {
-      const response = await axios.get('/api/users');
+      const response = await axios.get('/api/employees');
 
       if (isMountedRef.current) {
-        setUsers(response.data.users);
+        setUsers(response.data.employee);
       }
     } catch (err) {
       console.error(err);

@@ -51,12 +51,7 @@ const AuthContext = createContext({
   ...initialAuthState,
   method: 'Amplify',
   login: () => Promise.resolve(),
-  logout: () => Promise.resolve(),
-  register: () => Promise.resolve(),
-  verifyCode: () => Promise.resolve(),
-  resendCode: () => Promise.resolve(),
-  passwordRecovery: () => Promise.resolve(),
-  passwordReset: () => Promise.resolve()
+  logout: () => Promise.resolve()
 });
 
 export const AuthProvider = (props) => {
@@ -130,44 +125,6 @@ export const AuthProvider = (props) => {
     });
   };
 
-  const register = async (email, password) => {
-    await Auth.signUp({
-      username: email,
-      password,
-      attributes: { email }
-    });
-    dispatch({
-      type: 'REGISTER'
-    });
-  };
-
-  const verifyCode = async (username, code) => {
-    await Auth.confirmSignUp(username, code);
-    dispatch({
-      type: 'VERIFY_CODE'
-    });
-  };
-
-  const resendCode = async (username) => {
-    await Auth.resendSignUp(username);
-    dispatch({
-      type: 'RESEND_CODE'
-    });
-  };
-
-  const passwordRecovery = async (username) => {
-    await Auth.forgotPassword(username);
-    dispatch({
-      type: 'PASSWORD_RECOVERY'
-    });
-  };
-
-  const passwordReset = async (username, code, newPassword) => {
-    await Auth.forgotPasswordSubmit(username, code, newPassword);
-    dispatch({
-      type: 'PASSWORD_RESET'
-    });
-  };
 
   return (
     <AuthContext.Provider
@@ -175,12 +132,7 @@ export const AuthProvider = (props) => {
         ...state,
         method: 'Amplify',
         login,
-        logout,
-        register,
-        verifyCode,
-        resendCode,
-        passwordRecovery,
-        passwordReset
+        logout
       }}
     >
       {children}

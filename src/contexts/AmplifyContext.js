@@ -103,7 +103,7 @@ export const AuthProvider = (props) => {
       }
     );
     console.log("response =>",response);
-    const employeeRes = response.employeeRes;
+    const {employeeRes} = response.data;
     dispatch({
       type: 'LOGIN',
       payload: {

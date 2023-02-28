@@ -2,7 +2,6 @@ import { ListSubheader, alpha, Box, List, styled } from '@mui/material';
 import { useLocation, matchPath } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import SidebarMenuItem from './item';
-import menuItems from './items';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -212,7 +211,7 @@ const reduceChildRoutes = ({ ev, path, item }) => {
   return ev;
 };
 
-function SidebarMenu() {
+function SidebarMenu({menuItems}) {
   const location = useLocation();
   const { t } = useTranslation();
 

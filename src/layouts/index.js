@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 import Sidebar from './Sidebar';
 
-const SidebarLayout = () => {
+const SidebarLayout = ({items}) => {
   const theme = useTheme();
 
   return (
@@ -35,7 +35,7 @@ const SidebarLayout = () => {
       }}
     >
       
-      <Sidebar />
+      <Sidebar items={items}/>
       <Box
         sx={{
           position: 'relative',

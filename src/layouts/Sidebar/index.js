@@ -30,7 +30,7 @@ const SidebarWrapper = styled(Box)(
 `
 );
 
-function Sidebar() {
+function Sidebar({items}) {
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
   const closeSidebar = () => toggleSidebar();
   const theme = useTheme();
@@ -55,7 +55,7 @@ function Sidebar() {
       >
         <Scrollbar>
           {/* <SidebarTopSection /> */}
-          <SidebarMenu />
+          <SidebarMenu menuItems={items}/>
         </Scrollbar>
         <Divider
           sx={{

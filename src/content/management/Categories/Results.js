@@ -218,7 +218,7 @@ const Results = ({ products }) => {
                       </InputAdornment>
                     )
                   }}
-                  placeholder={t('Search by product name...')}
+                  placeholder="Buscar categoría por nombre"
                 />
               </Box>
               <TablePagination
@@ -245,7 +245,7 @@ const Results = ({ products }) => {
             color="text.secondary"
             align="center"
           >
-            {t("We couldn't find any products matching your search criteria")}
+                No hay data con ese criterio de búsqueda
           </Typography>
         ) : (
           <>

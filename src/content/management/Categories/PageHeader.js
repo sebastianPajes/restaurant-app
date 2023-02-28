@@ -155,7 +155,7 @@ function PageHeader() {
   };
 
   const handleCreateUserSuccess = () => {
-    enqueueSnackbar('La categoría fue creado exitosamente', {
+    enqueueSnackbar('La categoría fue creada exitosamente', {
       variant: 'success',
       anchorOrigin: {
         vertical: 'top',
@@ -257,10 +257,33 @@ function PageHeader() {
                   p: 3
                 }}
               >
-                <Grid container spacing={3}>
-                  <Grid item xs={12} lg={7}>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12} md={6}>
+                <Grid container spacing={0}>
+                  <Grid  item
+                    xs={12}
+                    sm={4}
+                    md={3}
+                    justifyContent="flex-end"
+                    textAlign={{ sm: 'right' }}>
+                        <Box
+                        pr={3}
+                        sx={{
+                          pt: `${theme.spacing(2)}`,
+                          pb: { xs: 1, md: 0 }
+                        }}
+                        alignSelf="center"
+                      >
+                        <b>Nombre:</b>
+                      </Box>
+                    </Grid>
+                    <Grid
+                    sx={{
+                      mb: `${theme.spacing(3)}`
+                    }}
+                    item
+                    xs={12}
+                    sm={8}
+                    md={9}
+                  >
                         <TextField
                           error={Boolean(
                             touched.name && errors.name
@@ -274,8 +297,26 @@ function PageHeader() {
                           value={values.name}
                           variant="outlined"
                         />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                            <Box
+                            pr={3}
+                            sx={{
+                              pb: { xs: 1, md: 0 }
+                            }}
+                          >
+                            <b>Descripción:</b>
+                          </Box>
+                    </Grid>
+                    <Grid
+                        sx={{
+                          mb: `${theme.spacing(3)}`
+                        }}
+                        item
+                        xs={12}
+                        sm={8}
+                        md={9}
+                      >
                         <TextField
                           error={Boolean(touched.description && errors.description)}
                           fullWidth
@@ -287,15 +328,15 @@ function PageHeader() {
                           value={values.description}
                           variant="outlined"
                         />
-                      </Grid>
-                      <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
                       <Box
                         pr={3}
                         sx={{
                           pb: { xs: 1, md: 0 }
                         }}
                       >
-                        <b>{t('Upload files')}:</b>
+                        <b>Subir imagen:</b>
                       </Box>
                     </Grid>
                   <Grid
@@ -361,8 +402,8 @@ function PageHeader() {
                           }}
                           severity="success"
                         >
-                          {t('You have uploaded')} <b>{files.length}</b>{' '}
-                          {t('files')}!
+                          {"Has subido"} <b>{files.length}</b>{' '}
+                          {"imágenes"}!
                         </Alert>
                         <Divider
                           sx={{
@@ -374,8 +415,6 @@ function PageHeader() {
                         </List>
                       </>
                     )}
-                  </Grid>
-                    </Grid>
                   </Grid>
                 </Grid>
               </DialogContent>

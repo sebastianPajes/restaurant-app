@@ -28,7 +28,8 @@ import {
   ListItemText,
   Alert,
   List,
-  Button
+  Button,
+  useTheme
 } from '@mui/material';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import { useSnackbar } from 'notistack';
@@ -143,7 +144,7 @@ function PageHeader() {
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
-
+  const theme = useTheme();
 
   const handleCreateUserOpen = () => {
     setOpen(true);

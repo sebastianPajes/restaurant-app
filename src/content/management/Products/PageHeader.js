@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-for */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
@@ -142,9 +142,19 @@ function PageHeader() {
 
 
   const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const theme = useTheme();
+
+
+  useEffect(()=>{
+      setCategories([
+        { name: 'CategoryTest', id:1 },
+        { name: 'CategoryTest2', id:2 }
+      ]);
+      
+    },[]);
 
   const handleCreateUserOpen = () => {
     setOpen(true);
@@ -155,7 +165,7 @@ function PageHeader() {
   };
 
   const handleCreateUserSuccess = () => {
-    enqueueSnackbar('La categoría fue creada exitosamente', {
+    enqueueSnackbar('El producto fue creada exitosamente', {
       variant: 'success',
       anchorOrigin: {
         vertical: 'top',
@@ -172,7 +182,7 @@ function PageHeader() {
       <Grid container justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography variant="h3" component="h3" gutterBottom>
-          Gestión de categorías
+          Gestión de productos
           </Typography>
         </Grid>
         <Grid item>
@@ -184,7 +194,7 @@ function PageHeader() {
             variant="contained"
             startIcon={<AddTwoToneIcon fontSize="small" />}
           >
-            Crear categoría
+            Crear producto
           </Button>
         </Grid>
       </Grid>
@@ -200,13 +210,15 @@ function PageHeader() {
           }}
         >
           <Typography variant="h4" gutterBottom>
-            Agregar categoría
+            Agregar producto
           </Typography>
         </DialogTitle>
         <Formik
           initialValues={{
             name: '',
             description: '',
+            categoryId: null,
+            price:0,
             submit: null
           }}
           onSubmit={async (
@@ -217,11 +229,13 @@ function PageHeader() {
               const {idToken} = await Auth.currentSession();
               console.log("user =>", user);
               const locationIdS = localStorage.getItem('locationId');
-              const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/categories`,
+              const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/products`,
               {
                 locationId: locationIdS,
+                categoryId: _values.categoryId,
                 name: _values.name,
-                description: _values.description
+                description: _values.description,
+                price: _values.price
               },
               {
                 headers: {
@@ -326,6 +340,84 @@ function PageHeader() {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.description}
+                          variant="outlined"
+                        />
+                    </Grid>
+                    <Grid
+                    item
+                    xs={12}
+                    sm={4}
+                    md={3}
+                    justifyContent="flex-end"
+                    textAlign={{ sm: 'right' }}
+                  >
+                    <Box
+                      pr={3}
+                      sx={{
+                        pt: `${theme.spacing(2)}`,
+                        pb: { xs: 1, md: 0 }
+                      }}
+                      alignSelf="center"
+                    >
+                      <b>Categorías:</b>
+                    </Box>
+                  </Grid>
+                  <Grid
+                    sx={{
+                      mb: `${theme.spacing(3)}`
+                    }}
+                    item
+                    xs={12}
+                    sm={8}
+                    md={9}
+                  >
+                    <Autocomplete
+                      multiple
+                      sx={{
+                        m: 0
+                      }}
+                      limitTags={2}
+                      getOptionLabel={(option) => option.name}
+                      options={categories}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          variant="outlined"
+                          placeholder="Selecciona una categoría para el producto"
+                          value={values.categoryId}
+                        />
+                      )}
+                    />
+                  </Grid>
+                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                            <Box
+                            pr={3}
+                            sx={{
+                              pb: { xs: 1, md: 0 }
+                            }}
+                          >
+                            <b>Precio:</b>
+                          </Box>
+                    </Grid>
+                    <Grid
+                        sx={{
+                          mb: `${theme.spacing(3)}`
+                        }}
+                        item
+                        xs={12}
+                        sm={8}
+                        md={9}
+                      >
+                        <TextField
+                          error={Boolean(touched.price && errors.price)}
+                          fullWidth
+                          helperText={touched.price && errors.price}
+                          label="Precio"
+                          name="price"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value={values.price}
                           variant="outlined"
                         />
                     </Grid>

@@ -22,6 +22,7 @@ const Loader = (Component) => (props) =>
 // Management
 
 const Categories = Loader(lazy(() => import('src/content/management/Categories')));
+const Products = Loader(lazy(() => import('src/content/management/Products')));
 
 
 const router = [
@@ -36,6 +37,10 @@ const router = [
       {
         path: 'categorias',
         element: <Categories/>
+      },
+      {
+        path: 'productos',
+        element: <Products/>
       }
     ]
   },

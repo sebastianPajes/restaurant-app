@@ -143,6 +143,7 @@ function PageHeader() {
 
   const [open, setOpen] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const theme = useTheme();
@@ -232,7 +233,7 @@ function PageHeader() {
               const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/products`,
               {
                 locationId: locationIdS,
-                categoryId: _values.categoryId,
+                categoryId: selectedCategory.categoryId,
                 name: _values.name,
                 description: _values.description,
                 price: _values.price
@@ -378,7 +379,7 @@ function PageHeader() {
                       limitTags={2}
                       getOptionLabel={(option) => option.name}
                       options={categories}
-                      onChange={(event,newValue)=> values.categoryId =newValue?.categoryId}
+                      onChange={(event,newValue)=> setSelectedCategory(newValue)}
                       renderInput={(params) => (
                         <TextField
                           {...params}

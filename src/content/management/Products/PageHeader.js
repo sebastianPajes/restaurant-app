@@ -150,8 +150,8 @@ function PageHeader() {
 
   useEffect(()=>{
       setCategories([
-        { name: 'CategoryTest', id:1 },
-        { name: 'CategoryTest2', id:2 }
+        { name: 'TestCategory', id:"fa8d4de7-e815-4e1a-b50c-58ad65dc9fe8" },
+        { name: 'TestCategory2', id: "9f9da674-2677-4c13-928f-1e0900a8f671"}
       ]);
       
     },[]);
@@ -372,7 +372,6 @@ function PageHeader() {
                     md={9}
                   >
                     <Autocomplete
-                      multiple
                       sx={{
                         m: 0
                       }}
@@ -385,6 +384,7 @@ function PageHeader() {
                           fullWidth
                           variant="outlined"
                           placeholder="Selecciona una categoría para el producto"
+                          onChange={handleChange}
                           value={values.categoryId}
                         />
                       )}

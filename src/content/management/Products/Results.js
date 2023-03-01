@@ -218,7 +218,7 @@ const Results = ({ products }) => {
                       </InputAdornment>
                     )
                   }}
-                  placeholder="Buscar categoría por nombre"
+                  placeholder="Buscar producto por nombre"
                 />
               </Box>
               <TablePagination

@@ -378,13 +378,13 @@ function PageHeader() {
                       limitTags={2}
                       getOptionLabel={(option) => option.name}
                       options={categories}
+                      onChange={(event,newValue)=> values.categoryId =newValue?.categoryId}
                       renderInput={(params) => (
                         <TextField
                           {...params}
                           fullWidth
                           variant="outlined"
                           placeholder="Selecciona una categoría para el producto"
-                          onChange={handleChange}
                           value={values.categoryId}
                         />
                       )}

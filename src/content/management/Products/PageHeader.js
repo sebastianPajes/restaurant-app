@@ -218,7 +218,6 @@ function PageHeader() {
           initialValues={{
             name: '',
             description: '',
-            categoryId: null,
             price:0,
             submit: null
           }}
@@ -233,7 +232,7 @@ function PageHeader() {
               const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/products`,
               {
                 locationId: locationIdS,
-                categoryId: selectedCategory.categoryId,
+                categoryId: selectedCategory.id,
                 name: _values.name,
                 description: _values.description,
                 price: _values.price
@@ -360,7 +359,7 @@ function PageHeader() {
                       }}
                       alignSelf="center"
                     >
-                      <b>Categorías:</b>
+                      <b>Categoría:</b>
                     </Box>
                   </Grid>
                   <Grid
@@ -386,7 +385,6 @@ function PageHeader() {
                           fullWidth
                           variant="outlined"
                           placeholder="Selecciona una categoría para el producto"
-                          value={values.categoryId}
                         />
                       )}
                     />

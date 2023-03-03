@@ -102,7 +102,6 @@ export const AuthProvider = (props) => {
         }
       }
     );
-    console.log("response =>",response);
     const {employeeRes} = response.data;
     dispatch({
       type: 'LOGIN',
@@ -110,13 +109,11 @@ export const AuthProvider = (props) => {
         user: {
           id: user.attributes.sub,
           email: user.attributes.email,
-          locationId: employeeRes.locationId,
           firstName: employeeRes.firstName,
           lastName: employeeRes.lastName
         }
       }
     });
-    localStorage.setItem('locationId',employeeRes.locationId);
     localStorage.setItem('firstName',employeeRes.firstName);
     localStorage.setItem('lastName',employeeRes.lastName);
   };

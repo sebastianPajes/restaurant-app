@@ -215,11 +215,8 @@ function PageHeader() {
           ) => {
             try {
               const {idToken} = await Auth.currentSession();
-              console.log("user =>", user);
-              const locationIdS = localStorage.getItem('locationId');
               const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/categories`,
               {
-                locationId: locationIdS,
                 name: _values.name,
                 description: _values.description
               },

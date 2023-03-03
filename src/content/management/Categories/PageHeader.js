@@ -336,7 +336,7 @@ function PageHeader() {
                           pb: { xs: 1, md: 0 }
                         }}
                       >
-                        <b>Subir imagen:</b>
+                        <b>Imagen:</b>
                       </Box>
                     </Grid>
                   <Grid

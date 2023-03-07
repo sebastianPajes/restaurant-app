@@ -23,13 +23,13 @@ function ManagementProducts() {
           }
         });
 
+      console.log(response);
       if (isMountedRef.current) {
         setCategories(response.data.categories);
       }
     } catch (err) {
       console.error(err);
     }
-    console.log(response);
   }, [isMountedRef]);
 
   useEffect(() => {

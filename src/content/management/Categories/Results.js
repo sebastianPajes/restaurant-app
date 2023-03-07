@@ -113,7 +113,7 @@ const applyPagination = (products, page, limit) => {
   return products.slice(page * limit, page * limit + limit);
 };
 
-const Results = ({ products }) => {
+const Results = ({ categories }) => {
   const [selectedItems, setSelectedProducts] = useState([]);
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
@@ -131,7 +131,7 @@ const Results = ({ products }) => {
 
   const handleSelectAllProducts = (event) => {
     setSelectedProducts(
-      event.target.checked ? products.map((product) => product.id) : []
+      event.target.checked ? categories.map((product) => product.id) : []
     );
   };
 
@@ -153,12 +153,12 @@ const Results = ({ products }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredProducts = applyFilters(products, query);
+  const filteredProducts = applyFilters(categories, query);
   const paginatedProducts = applyPagination(filteredProducts, page, limit);
   const selectedBulkActions = selectedItems.length > 0;
   const selectedSomeProducts =
-    selectedItems.length > 0 && selectedItems.length < products.length;
-  const selectedAllProducts = selectedItems.length === products.length;
+    selectedItems.length > 0 && selectedItems.length < categories.length;
+  const selectedAllProducts = selectedItems.length === categories.length;
   const mobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
@@ -483,11 +483,11 @@ const Results = ({ products }) => {
 };
 
 Results.propTypes = {
-  products: PropTypes.array.isRequired
+  categories: PropTypes.array.isRequired
 };
 
 Results.defaultProps = {
-  products: []
+  categories: []
 };
 
 export default Results;

@@ -166,7 +166,7 @@ function PageHeader() {
   };
 
   const handleCreateUserSuccess = () => {
-    enqueueSnackbar('El producto fue creada exitosamente', {
+    enqueueSnackbar('El producto fue creado exitosamente', {
       variant: 'success',
       anchorOrigin: {
         vertical: 'top',

@@ -11,23 +11,30 @@ import Results from './Results';
 
 function ManagementProducts() {
   const isMountedRef = useRefMounted();
-  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-  const getProducts = useCallback(async () => {
+  const getCategories = useCallback(async () => {
     try {
-      const response = await axios.get('/api/categories');
+      const {idToken} = await Auth.currentSession();
+      const response = await axios.get('https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/categories',
+      {
+        headers: {
+          Authorization : `Bearer ${idToken.jwtToken}`
+          }
+        });
 
       if (isMountedRef.current) {
-        setProducts(response.data.products);
+        setCategories(response.data.categories);
       }
+      console.log(response);
     } catch (err) {
       console.error(err);
     }
   }, [isMountedRef]);
 
   useEffect(() => {
-    getProducts();
-  }, [getProducts]);
+    getCategories();
+  }, [getCategories]);
 
   return (
     <>
@@ -49,7 +56,7 @@ function ManagementProducts() {
         spacing={4}
       >
         <Grid item xs={12}>
-          <Results products={products} />
+          <Results categories={categories} />
         </Grid>
       </Grid>
     </>

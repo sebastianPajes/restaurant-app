@@ -23,6 +23,7 @@ const Loader = (Component) => (props) =>
 
 const Categories = Loader(lazy(() => import('src/content/management/Categories')));
 const Products = Loader(lazy(() => import('src/content/management/Products')));
+const Users = Loader(lazy(() => import('src/content/management/Users')));
 
 
 const router = [
@@ -53,8 +54,8 @@ const router = [
     ),
     children: [
       {
-        path: 'gestion',
-        children: internalManagementRoutes
+        path: 'empleados',
+        element: <Users />
       }
     ]
   }

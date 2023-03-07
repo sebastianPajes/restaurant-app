@@ -26,10 +26,10 @@ function ManagementProducts() {
       if (isMountedRef.current) {
         setCategories(response.data.categories);
       }
-      console.log(response);
     } catch (err) {
       console.error(err);
     }
+    console.log(response);
   }, [isMountedRef]);
 
   useEffect(() => {

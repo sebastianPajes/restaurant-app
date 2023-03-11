@@ -2,6 +2,7 @@ import { useState, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import numeral from 'numeral';
+import Toggle from 'react-toggle'
 
 import {
   Avatar,
@@ -254,7 +255,7 @@ const Results = ({ categories }) => {
                 <TableHead>
                   <TableRow>
                     <TableCell> Nombre </TableCell>
-                    <TableCell align="center"> Descripción</TableCell>
+                    <TableCell> Descripción</TableCell>
                     <TableCell align="center"> Visible en menú</TableCell>
                     <TableCell align="center"> Acciones </TableCell>  
                   </TableRow>
@@ -306,7 +307,12 @@ const Results = ({ categories }) => {
                             </Box>
                           </Box>
                         </TableCell>
-                        <TableCell align="center">{product.orders}</TableCell>
+                        <TableCell align="center">
+                              <Toggle
+                                defaultChecked={true}
+                                icons={false}
+                                onChange={handleConfirmDelete} />
+                          </TableCell>
                         <TableCell align="center">
                           <Typography noWrap>
                             <Tooltip title="Eliminar" arrow>

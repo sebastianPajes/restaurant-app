@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import PageHeader from './PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-
+import { Auth } from 'aws-amplify';
 import { Grid } from '@mui/material';
 import useRefMounted from 'src/hooks/useRefMounted';
 import Results from './Results';

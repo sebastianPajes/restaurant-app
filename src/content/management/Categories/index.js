@@ -16,12 +16,12 @@ function ManagementProducts() {
   const getCategories = useCallback(async () => {
     try {
       const {idToken} = await Auth.currentSession();
-      const response = await axios.get('https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/categories',
+      const response = await axios.get('https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/categories',
       {
         headers: {
           Authorization : `Bearer ${idToken.jwtToken}`
           }
-        });
+      });
 
       console.log(response);
       if (isMountedRef.current) {

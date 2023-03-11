@@ -215,7 +215,7 @@ function PageHeader() {
           ) => {
             try {
               const {idToken} = await Auth.currentSession();
-              const response = await axios.post(`https://hk7e0xi2r9.execute-api.us-east-1.amazonaws.com/prod/api/categories`,
+              const response = await axios.post(`https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/categories`,
               {
                 name: _values.name,
                 description: _values.description

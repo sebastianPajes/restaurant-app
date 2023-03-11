@@ -15,8 +15,14 @@ function ManagementProducts() {
 
   const getProducts = useCallback(async () => {
     try {
-      const response = await axios.get('/api/categories');
-
+      const response = await axios.get('https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/products',
+      {
+        headers: {
+          Authorization : `Bearer ${idToken.jwtToken}`
+          }
+      });
+      
+      console.log("response->", response);
       if (isMountedRef.current) {
         setProducts(response.data.products);
       }

@@ -274,7 +274,7 @@ const Results = ({ categories }) => {
                       >
                         <TableCell>
                           <Box display="flex" alignItems="center">
-                            <ImgWrapper src="public/static/defaultImage.png" />
+                            <ImgWrapper src="/public/static/defaultImage.png" />
                             <Box
                               pl={1}
                               sx={{
@@ -321,7 +321,7 @@ const Results = ({ categories }) => {
                                 onClick={handleConfirmDelete}
                                 color="primary"
                               >
-                                <DeleteTwoToneIcon fontSize="small" />
+                                <DeleteTwoToneIcon fontSize="medium" />
                               </IconButton>
                             </Tooltip>
                           </Typography>

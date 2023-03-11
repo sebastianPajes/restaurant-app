@@ -174,7 +174,7 @@ const Results = ({ categories }) => {
   const handleDeleteCompleted = () => {
     setOpenConfirmDelete(false);
 
-    enqueueSnackbar(t('You successfully deleted the product'), {
+    enqueueSnackbar("Se ha borrado exitosamente la categoría", {
       variant: 'success',
       anchorOrigin: {
         vertical: 'top',
@@ -253,7 +253,7 @@ const Results = ({ categories }) => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center"> Nombre </TableCell>
+                    <TableCell> Nombre </TableCell>
                     <TableCell align="center"> Descripción</TableCell>
                     <TableCell align="center"> Visible en menú</TableCell>
                     <TableCell align="center"> Acciones </TableCell>  
@@ -276,7 +276,7 @@ const Results = ({ categories }) => {
                             <Box
                               pl={1}
                               sx={{
-                                width: 250
+                                width: 100
                               }}
                             >
                               <Link
@@ -366,21 +366,7 @@ const Results = ({ categories }) => {
             }}
             variant="h3"
           >
-            {t('Do you really want to delete this product')}?
-          </Typography>
-
-          <Typography
-            align="center"
-            sx={{
-              pt: 2,
-              pb: 4,
-              px: 6
-            }}
-            fontWeight="normal"
-            color="text.secondary"
-            variant="h4"
-          >
-            {t("You won't be able to revert after deletion")}
+            Realmente quieres borrar esta categoría?
           </Typography>
 
           <Box>
@@ -392,7 +378,7 @@ const Results = ({ categories }) => {
               }}
               onClick={closeConfirmDelete}
             >
-              {t('Cancel')}
+              Cancelar
             </Button>
             <ButtonError
               onClick={handleDeleteCompleted}
@@ -403,7 +389,7 @@ const Results = ({ categories }) => {
               }}
               variant="contained"
             >
-              {t('Delete')}
+              Eliminar
             </ButtonError>
           </Box>
         </Box>

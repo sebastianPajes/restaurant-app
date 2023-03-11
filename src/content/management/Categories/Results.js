@@ -270,10 +270,11 @@ const Results = ({ categories }) => {
                         hover
                         key={product.id}
                         selected={isProductSelected}
+                        style={{background:'orange'}}
                       >
                         <TableCell>
                           <Box display="flex" alignItems="center">
-                            <ImgWrapper src="" />
+                            <ImgWrapper src="public/static/defaultImage.png" />
                             <Box
                               pl={1}
                               sx={{

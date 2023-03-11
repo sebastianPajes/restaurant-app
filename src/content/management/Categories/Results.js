@@ -253,17 +253,10 @@ const Results = ({ categories }) => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={selectedAllProducts}
-                        indeterminate={selectedSomeProducts}
-                        onChange={handleSelectAllProducts}
-                      />
-                    </TableCell>
-                    <TableCell>Nombre </TableCell>
-                    <TableCell align="center">Descripción</TableCell>
-                    <TableCell align="center">Visible en menú</TableCell>
-                    <TableCell align="center"></TableCell>  
+                    <TableCell align="center"> Nombre </TableCell>
+                    <TableCell align="center"> Descripción</TableCell>
+                    <TableCell align="center"> Visible en menú</TableCell>
+                    <TableCell align="center"> Acciones </TableCell>  
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -316,7 +309,7 @@ const Results = ({ categories }) => {
                         <TableCell align="center">{product.orders}</TableCell>
                         <TableCell align="center">
                           <Typography noWrap>
-                            <Tooltip title={t('Delete')} arrow>
+                            <Tooltip title="Eliminar" arrow>
                               <IconButton
                                 onClick={handleConfirmDelete}
                                 color="primary"

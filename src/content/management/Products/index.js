@@ -25,7 +25,7 @@ function ManagementProducts() {
       
       console.log("response->", response);
       if (isMountedRef.current) {
-        setProducts(response.data.products);
+        setProducts(response.data);
       }
     } catch (err) {
       console.error(err);

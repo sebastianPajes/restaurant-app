@@ -25,7 +25,7 @@ function ManagementProducts() {
 
       console.log(response);
       if (isMountedRef.current) {
-        setCategories(response.data.categories);
+        setCategories(response.data);
       }
     } catch (err) {
       console.error(err);

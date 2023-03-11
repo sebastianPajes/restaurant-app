@@ -279,7 +279,7 @@ const Results = ({ categories }) => {
                       >
                         <TableCell>
                           <Box display="flex" alignItems="center">
-                            <ImgWrapper src={product.images[0]} />
+                            <ImgWrapper src="" />
                             <Box
                               pl={1}
                               sx={{

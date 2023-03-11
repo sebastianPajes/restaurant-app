@@ -43,7 +43,7 @@ import { useSnackbar } from 'notistack';
 import Text from 'src/components/Text';
 import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartmentTwoTone';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-
+import '../../../components/toggle.css'
 const DialogWrapper = styled(Dialog)(
   () => `
       .MuiDialog-paper {
@@ -312,7 +312,7 @@ const Results = ({ categories }) => {
                                 defaultChecked={true}
                                 icons={false}
                                 onChange={handleConfirmDelete} />
-                          </TableCell>
+                        </TableCell>
                         <TableCell align="center">
                           <Typography noWrap>
                             <Tooltip title="Eliminar" arrow>

@@ -270,7 +270,7 @@ const Results = ({ categories }) => {
                         hover
                         key={product.id}
                         selected={isProductSelected}
-                        style={{background:'orange'}}
+                        style={{background:'#FFE159'}}
                       >
                         <TableCell>
                           <Box display="flex" alignItems="center">

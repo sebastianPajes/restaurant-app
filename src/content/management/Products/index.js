@@ -26,13 +26,14 @@ function ManagementProducts() {
 
       if (isMountedRef.current) {
         setCategories(response.data);
+        return response.data;
       }
     } catch (err) {
       console.error(err);
     }
   }, [isMountedRef]);
 
-  const getProducts = useCallback(async () => {
+  const getProducts = useCallback(async (categoriesReponse) => {
     try {
       const {idToken} = await Auth.currentSession();
       const response = await axios.get('https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/products',
@@ -43,6 +44,10 @@ function ManagementProducts() {
       });
       
       if (isMountedRef.current) {
+        response.data.forEach((p) => {
+          p.categoryName = categoriesReponse.find( c => c.sk === p.sk.split('/')[0]).name;
+          console.log("soy del for nuevo ", p)
+        })
         setProducts(response.data);
       }
     } catch (err) {
@@ -52,19 +57,9 @@ function ManagementProducts() {
   
 
   useEffect(() => {
-    getCategories();
-    getProducts();
+    const categoriesReponse = getCategories();
+    getProducts(categoriesReponse);
   }, [getProducts, getCategories]);
-
-  useEffect(() => {
-    if ( products.length > 0 && categories.length > 0){
-      products.forEach((p) => {
-        p.categoryName = categories.find( c => c.sk === p.sk.split('/')[0]).name;
-        console.log("soy del useEffect nuevo ", p)
-      })
-      setProducts(products);
-    }
-  }, [products , categories]);
 
   return (
     <>

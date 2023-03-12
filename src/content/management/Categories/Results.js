@@ -290,18 +290,7 @@ const Results = ({ categories }) => {
                                 width: 100
                               }}
                             >
-                              <Link
-                                component={RouterLink}
-                                to={
-                                  `/${
-                                    location.pathname.split('/')[1]
-                                  }/management/commerce/products/single/` +
-                                  product.id
-                                }
-                                variant="h5"
-                              >
                                 {product.name}
-                              </Link>
                             </Box>
                           </Box>
                         </TableCell>

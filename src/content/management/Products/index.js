@@ -55,9 +55,12 @@ function ManagementProducts() {
   
 
   useEffect(() => {
-    const categoriesResponse = getCategories();
-    console.log(categoriesResponse);
-    getProducts(categoriesResponse);
+    getCategories().then(
+      categoriesResponse => {
+        console.log(categoriesResponse);
+        getProducts(categoriesResponse);
+      }
+    );
   }, [getProducts, getCategories]);
 
   return (

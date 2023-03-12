@@ -33,7 +33,7 @@ function ManagementProducts() {
     }
   }, [isMountedRef]);
 
-  const getProducts = useCallback(async (categoriesReponse) => {
+  const getProducts = useCallback(async (categoriesResponse) => {
     try {
       const {idToken} = await Auth.currentSession();
       const response = await axios.get('https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/products',
@@ -45,7 +45,7 @@ function ManagementProducts() {
       
       if (isMountedRef.current) {
         response.data.forEach((p) => {
-          p.categoryName = categoriesReponse.find( c => c.sk === p.sk.split('/')[0]).name;
+          p.categoryName = categoriesResponse.find( c => c.sk === p.sk.split('/')[0]).name;
           console.log("soy del for nuevo ", p)
         })
         setProducts(response.data);
@@ -57,8 +57,9 @@ function ManagementProducts() {
   
 
   useEffect(() => {
-    const categoriesReponse = getCategories();
-    getProducts(categoriesReponse);
+    const categoriesResponse = getCategories();
+    console.log(categoriesResponse);
+    getProducts(categoriesResponse);
   }, [getProducts, getCategories]);
 
   return (

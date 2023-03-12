@@ -39,6 +39,7 @@ import LaunchTwoToneIcon from '@mui/icons-material/LaunchTwoTone';
 import Label from 'src/components/Label';
 import BulkActions from './BulkActions';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import EditIcon from '@mui/icons-material/Edit';
 import { useSnackbar } from 'notistack';
 import Text from 'src/components/Text';
 import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartmentTwoTone';
@@ -321,6 +322,24 @@ const Results = ({ categories }) => {
                         </TableCell>
                         <TableCell align="center">
                           <Typography noWrap>
+                            <Button
+                              sx={{
+                                mt: { xs: 2, sm: 0 }
+                              }}
+                              onClick={handleEditCategory}
+                              variant="contained"
+                            >
+                              Editar
+                            </Button>
+                                                        
+                            <Tooltip title="Editar" arrow>
+                              <IconButton
+                                onClick={handleEditCategory}
+                                color="primary"
+                              >
+                                <EditIcon fontSize="medium" />
+                              </IconButton>
+                            </Tooltip>
                             <Tooltip title="Eliminar" arrow>
                               <IconButton
                                 onClick={handleConfirmDelete}
@@ -330,15 +349,7 @@ const Results = ({ categories }) => {
                               </IconButton>
                             </Tooltip>
                           </Typography>
-                          <Button
-                            sx={{
-                              mt: { xs: 2, sm: 0 }
-                            }}
-                            onClick={handleEditCategory}
-                            variant="contained"
-                          >
-                            Editar
-                          </Button>
+        
                         </TableCell>
                       </TableRow>
                     );

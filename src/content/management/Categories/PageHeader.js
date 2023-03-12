@@ -116,7 +116,7 @@ const ButtonUploadWrapper = styled(Box)(
 );
 
 
-function PageHeader() {
+function PageHeader({handleAddCategory}) {
   const { t } = useTranslation();
   const {
     acceptedFiles,
@@ -154,7 +154,7 @@ function PageHeader() {
     setOpen(false);
   };
 
-  const handleCreateUserSuccess = () => {
+  const handleCreateUserSuccess = (newCategory) => {
     enqueueSnackbar('La categoría fue creada exitosamente', {
       variant: 'success',
       anchorOrigin: {
@@ -165,6 +165,7 @@ function PageHeader() {
     });
 
     setOpen(false);
+    handleAddCategory(prev =>[...prev,newCategory])
   };
 
   return (
@@ -215,11 +216,12 @@ function PageHeader() {
           ) => {
             try {
               const {idToken} = await Auth.currentSession();
+              const newCategory = {
+                  name: _values.name,
+                  description: _values.description
+              }
               const response = await axios.post(`https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/categories`,
-              {
-                name: _values.name,
-                description: _values.description
-              },
+                newCategory,
               {
                 headers: {
                   Authorization : `Bearer ${idToken.jwtToken}`
@@ -229,7 +231,7 @@ function PageHeader() {
               resetForm();
               setStatus({ success: true });
               setSubmitting(false);
-              handleCreateUserSuccess();
+              handleCreateUserSuccess(newCategory);
             } catch (err) {
               console.error(err);
               setStatus({ success: false });

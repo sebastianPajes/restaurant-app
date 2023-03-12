@@ -42,7 +42,7 @@ function ManagementProducts() {
         <title>Gestión de categorías</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+        <PageHeader handleAddCategory={setCategories}/>
       </PageTitleWrapper>
 
       <Grid

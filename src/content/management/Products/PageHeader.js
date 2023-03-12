@@ -167,7 +167,7 @@ function PageHeader({handleAddProduct, categories}) {
     });
 
     setOpen(false);
-    product.categoryName = selectedCategory.name,
+    product.categoryName = selectedCategory.name;
     handleAddProduct(prev => [...prev, product]);
 
   };

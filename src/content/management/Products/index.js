@@ -60,6 +60,15 @@ function ManagementProducts() {
     })
   }, [getProducts, getCategories]);
 
+  useEffect(() => {
+    if ( products.length > 0 && categories.length > 0){
+      products.forEach((p) => {
+        p.categoryName = categories.find( c => c.sk === p.sk.split('/')[0]).name;
+        console.log("soy del useEffect nuevo ", p)
+      })
+    }
+  }, [products , categories]);
+
   return (
     <>
       <Helmet>

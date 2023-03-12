@@ -258,9 +258,9 @@ const Results = ({ products, categories}) => {
               <TableHead>
                 <TableRow>
                   <TableCell> Nombre </TableCell>
-                  <TableCell> Descripción</TableCell>
+                  <TableCell> Descripción </TableCell>
+                  <TableCell> Categoría </TableCell>
                   <TableCell> Precio </TableCell>
-                  <TableCell align="center"> Visible en menú</TableCell>
                   <TableCell align="center"> Acciones </TableCell>  
                 </TableRow>
               </TableHead>
@@ -325,12 +325,7 @@ const Results = ({ products, categories}) => {
                         </Box>
                       </TableCell>
                       <TableCell>
-                          <Typography
-                            sx={{
-                              textDecorationLine:
-                                product.price !== 0 ? 'line-through' : ''
-                            }}
-                          >
+                          <Typography>
                             ${numeral(product.price).format(`0,0.00`)}
                           </Typography>
 	                    </TableCell>
@@ -412,21 +407,7 @@ const Results = ({ products, categories}) => {
             }}
             variant="h3"
           >
-            {t('Do you really want to delete this product')}?
-          </Typography>
-
-          <Typography
-            align="center"
-            sx={{
-              pt: 2,
-              pb: 4,
-              px: 6
-            }}
-            fontWeight="normal"
-            color="text.secondary"
-            variant="h4"
-          >
-            {t("You won't be able to revert after deletion")}
+            Realmente quieres borrar este producto?
           </Typography>
 
           <Box>
@@ -438,7 +419,7 @@ const Results = ({ products, categories}) => {
               }}
               onClick={closeConfirmDelete}
             >
-              {t('Cancel')}
+              Cancelar
             </Button>
             <ButtonError
               onClick={handleDeleteCompleted}
@@ -449,7 +430,7 @@ const Results = ({ products, categories}) => {
               }}
               variant="contained"
             >
-              {t('Delete')}
+              Eliminar
             </ButtonError>
           </Box>
         </Box>

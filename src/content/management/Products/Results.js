@@ -326,7 +326,7 @@ const Results = ({ products, categories}) => {
                       </TableCell>
                       <TableCell>
                           <Typography>
-                            ${numeral(product.price).format(`0,0.00`)}
+                            ${numeral(product.price).format(`S/.0,0.00`)}
                           </Typography>
 	                    </TableCell>
                       <TableCell align="center">

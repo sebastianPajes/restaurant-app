@@ -54,10 +54,6 @@ function ManagementProducts() {
   useEffect(() => {
     getCategories();
     getProducts();
-    products.forEach((p) => {
-      p.categoryName = categories.find( c => c.sk === p.sk.split('/')[0]).name;
-      console.log(p)
-    })
   }, [getProducts, getCategories]);
 
   useEffect(() => {
@@ -66,6 +62,7 @@ function ManagementProducts() {
         p.categoryName = categories.find( c => c.sk === p.sk.split('/')[0]).name;
         console.log("soy del useEffect nuevo ", p)
       })
+      setProducts(products);
     }
   }, [products , categories]);
 

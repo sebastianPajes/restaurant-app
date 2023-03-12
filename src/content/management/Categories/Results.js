@@ -154,6 +154,11 @@ const Results = ({ categories }) => {
     setLimit(parseInt(event.target.value));
   };
 
+
+  const handleEditCategory = (event) => {
+    console.log("Editar");
+  }
+
   const filteredProducts = applyFilters(categories, query);
   const paginatedProducts = applyPagination(filteredProducts, page, limit);
   const selectedBulkActions = selectedItems.length > 0;
@@ -325,6 +330,15 @@ const Results = ({ categories }) => {
                               </IconButton>
                             </Tooltip>
                           </Typography>
+                          <Button
+                            sx={{
+                              mt: { xs: 2, sm: 0 }
+                            }}
+                            onClick={handleEditCategory}
+                            variant="contained"
+                          >
+                            Editar
+                          </Button>
                         </TableCell>
                       </TableRow>
                     );

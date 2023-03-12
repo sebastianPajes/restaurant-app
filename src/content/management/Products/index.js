@@ -46,7 +46,6 @@ function ManagementProducts() {
       if (isMountedRef.current) {
         response.data.forEach((p) => {
           p.categoryName = categoriesResponse.find( c => c.sk === p.sk.split('/')[0]).name;
-          console.log("soy del for nuevo ", p)
         })
         setProducts(response.data);
       }

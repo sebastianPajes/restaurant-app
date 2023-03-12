@@ -14,7 +14,7 @@ function ManagementProducts() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  const getCategories = useCallback(async () => {
+  const getCategories = async () => {
     try {
       const {idToken} = await Auth.currentSession();
       const response = await axios.get('https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/categories',
@@ -24,14 +24,12 @@ function ManagementProducts() {
           }
       });
 
-      if (isMountedRef.current) {
-        setCategories(response.data);
-        return response.data;
-      }
+      setCategories(response.data);
+      return response.data;
     } catch (err) {
       console.error(err);
     }
-  }, [isMountedRef]);
+  };
 
   const getProducts = useCallback(async (categoriesResponse) => {
     try {

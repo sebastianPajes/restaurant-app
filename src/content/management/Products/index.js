@@ -55,7 +55,7 @@ function ManagementProducts() {
     getCategories();
     getProducts();
     products.forEach((p) => {
-      p.categoryName = categories.find( c => c.sk === p.sk.split('/')[0]);
+      p.categoryName = categories.find( c => c.sk === p.sk.split('/')[0]).name;
       console.log(p)
     })
   }, [getProducts, getCategories]);

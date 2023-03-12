@@ -167,7 +167,9 @@ function PageHeader({handleAddProduct, categories}) {
     });
 
     setOpen(false);
+    product.categoryName = selectedCategory.name,
     handleAddProduct(prev => [...prev, product]);
+
   };
 
   return (
@@ -221,7 +223,6 @@ function PageHeader({handleAddProduct, categories}) {
               const {idToken} = await Auth.currentSession();
               const newProduct = {
                 categoryId: selectedCategory.sk.split('#')[1],
-                categoryName: selectedCategory.name,
                 name: _values.name,
                 description: _values.description,
                 price: _values.price

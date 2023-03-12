@@ -113,7 +113,7 @@ const applyPagination = (products, page, limit) => {
   return products.slice(page * limit, page * limit + limit);
 };
 
-const Results = ({ products }) => {
+const Results = ({ products, categories}) => {
   const [selectedItems, setSelectedProducts] = useState([]);
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
@@ -174,7 +174,7 @@ const Results = ({ products }) => {
   const handleDeleteCompleted = () => {
     setOpenConfirmDelete(false);
 
-    enqueueSnackbar(t('You successfully deleted the product'), {
+    enqueueSnackbar("Se ha eliminado exitosamente el producto", {
       variant: 'success',
       anchorOrigin: {
         vertical: 'top',
@@ -182,6 +182,10 @@ const Results = ({ products }) => {
       },
       TransitionComponent: Zoom
     });
+  };
+
+  const handleEditProduct = () => {
+
   };
 
   return (
@@ -249,164 +253,136 @@ const Results = ({ products }) => {
           </Typography>
         ) : (
           <>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={selectedAllProducts}
-                        indeterminate={selectedSomeProducts}
-                        onChange={handleSelectAllProducts}
-                      />
-                    </TableCell>
-                    <TableCell>{t('Product name')}</TableCell>
-                    <TableCell>{t('Price')}</TableCell>
-                    <TableCell align="center">{t('Stock')}</TableCell>
-                    <TableCell align="center">{t('Rating')}</TableCell>
-                    <TableCell align="center">{t('Orders')}</TableCell>
-                    <TableCell>{t('Categories')}</TableCell>
-                    <TableCell align="center">{t('Actions')}</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {paginatedProducts.map((product) => {
-                    const isProductSelected = selectedItems.includes(
-                      product.id
-                    );
-                    return (
-                      <TableRow
-                        hover
-                        key={product.id}
-                        selected={isProductSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={isProductSelected}
-                            onChange={(event) =>
-                              handleSelectOneProduct(event, product.id)
-                            }
-                            value={isProductSelected}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Box display="flex" alignItems="center">
-                            <ImgWrapper src={product.images[0]} />
-                            <Box
-                              pl={1}
-                              sx={{
-                                width: 250
-                              }}
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell> Nombre </TableCell>
+                  <TableCell> Descripción</TableCell>
+                  <TableCell> Precio </TableCell>
+                  <TableCell align="center"> Visible en menú</TableCell>
+                  <TableCell align="center"> Acciones </TableCell>  
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {paginatedProducts.map((product) => {
+                  const isProductSelected = selectedItems.includes(
+                    product.id
+                  );
+                  return (
+                    <TableRow
+                      hover
+                      key={product.id}
+                      selected={isProductSelected}
+                      style={{background:'#FFE159'}}
+                    >
+                      <TableCell>
+                        <Box display="flex" alignItems="center">
+                          <ImgWrapper src="/static/defaultImage.png" />
+                          <Box
+                            pl={1}
+                            sx={{
+                              width: 100
+                            }}
+                          >
+                            <Link
+                              component={RouterLink}
+                              to={
+                                `/${
+                                  location.pathname.split('/')[1]
+                                }/management/commerce/products/single/` +
+                                product.id
+                              }
+                              variant="h5"
                             >
-                              <Link
-                                component={RouterLink}
-                                to={
-                                  `/${
-                                    location.pathname.split('/')[1]
-                                  }/management/commerce/products/single/` +
-                                  product.id
-                                }
-                                variant="h5"
-                              >
-                                {product.name}
-                              </Link>
-                              <Typography variant="subtitle2" noWrap>
-                                {product.summary}
-                              </Typography>
-                            </Box>
+                              {product.name}
+                            </Link>
                           </Box>
-                        </TableCell>
-                        <TableCell>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Box display="flex" alignItems="center">
+                          <Box
+                            pl={1}
+                            sx={{
+                              width: 250
+                            }}
+                          >
+                              {product.description}
+                          </Box>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Box display="flex" alignItems="center">
+                          <Box
+                            pl={1}
+                            sx={{
+                              width: 60
+                            }}
+                          >
+                              {product.categoryName}
+                          </Box>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
                           <Typography
                             sx={{
                               textDecorationLine:
-                                product.sale_price !== 0 ? 'line-through' : ''
+                                product.price !== 0 ? 'line-through' : ''
                             }}
                           >
                             ${numeral(product.price).format(`0,0.00`)}
                           </Typography>
-                          {product.sale_price !== 0 && (
-                            <Typography>
-                              <Text color="error">
-                                ${numeral(product.sale_price).format(`0,0.00`)}
-                              </Text>
-                            </Typography>
-                          )}
-                        </TableCell>
-                        <TableCell align="center">
-                          <Label color="success">
-                            <b>{product.stock}</b>
-                          </Label>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Box display="flex" alignItems="center">
-                            <Text color="warning">
-                              <LocalFireDepartmentTwoToneIcon fontSize="small" />
-                            </Text>
-                            <Typography
-                              variant="h5"
-                              sx={{
-                                pl: 0.5
-                              }}
+	                    </TableCell>
+                      <TableCell align="center">
+                        <Typography noWrap>
+                          <Button
+                            sx={{
+                              mt: { xs: 2, sm: 0 }
+                            }}
+                            onClick={handleEditProduct}
+                            variant="contained"
+                          >
+                            Editar
+                          </Button>
+                                                      
+                          {/* <Tooltip title="Editar" arrow>
+                            <IconButton
+                              onClick={handleEditCategory}
+                              color="primary"
                             >
-                              {product.rating}
-                            </Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell align="center">{product.orders}</TableCell>
-                        <TableCell>
-                          {product.categories.map((value) => {
-                            return (
-                              <span key={value}>
-                                <Link href="#">{value}</Link>,{' '}
-                              </span>
-                            );
-                          })}
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography noWrap>
-                            <Tooltip title={t('View')} arrow>
-                              <IconButton
-                                component={RouterLink}
-                                to={
-                                  `/${
-                                    location.pathname.split('/')[1]
-                                  }/management/commerce/products/single/` +
-                                  product.id
-                                }
-                                color="primary"
-                              >
-                                <LaunchTwoToneIcon fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                            <Tooltip title={t('Delete')} arrow>
-                              <IconButton
-                                onClick={handleConfirmDelete}
-                                color="primary"
-                              >
-                                <DeleteTwoToneIcon fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <Box p={2}>
-              <TablePagination
-                component="div"
-                count={filteredProducts.length}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handleLimitChange}
-                page={page}
-                rowsPerPage={limit}
-                rowsPerPageOptions={[5, 10, 15]}
-              />
-            </Box>
-          </>
+                              <EditIcon fontSize="medium" />
+                            </IconButton>
+                          </Tooltip> */}
+                          <Tooltip title="Eliminar" arrow>
+                            <IconButton
+                              onClick={handleConfirmDelete}
+                              color="primary"
+                            >
+                              <DeleteTwoToneIcon fontSize="medium" />
+                            </IconButton>
+                          </Tooltip>
+                        </Typography>
+      
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Box p={2}>
+            <TablePagination
+              component="div"
+              count={filteredProducts.length}
+              onPageChange={handlePageChange}
+              onRowsPerPageChange={handleLimitChange}
+              page={page}
+              rowsPerPage={limit}
+              rowsPerPageOptions={[5, 10, 15]}
+            />
+          </Box>
+        </>
         )}
       </Card>
       <DialogWrapper

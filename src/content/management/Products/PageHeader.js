@@ -118,8 +118,7 @@ const ButtonUploadWrapper = styled(Box)(
 );
 
 
-function PageHeader({handleAddProduct}) {
-  const isMountedRef = useRefMounted();
+function PageHeader({handleAddProduct, categories}) {
   const { t } = useTranslation();
   const {
     acceptedFiles,
@@ -144,33 +143,13 @@ function PageHeader({handleAddProduct}) {
   ));
 
   const [open, setOpen] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
 
-  const getCategories = useCallback(async () => {
-    try {
-      const {idToken} = await Auth.currentSession();
-      const response = await axios.get('https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/categories',
-      {
-        headers: {
-          Authorization : `Bearer ${idToken.jwtToken}`
-          }
-      });
-
-      console.log(response);
-      if (isMountedRef.current) {
-        setCategories(response.data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMountedRef]);
 
   const handleCreateUserOpen = () => {
     setOpen(true);
-    getCategories();
   };
 
   const handleCreateUserClose = () => {

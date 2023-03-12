@@ -12,6 +12,25 @@ import Results from './Results';
 function ManagementProducts() {
   const isMountedRef = useRefMounted();
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const getCategories = useCallback(async () => {
+    try {
+      const {idToken} = await Auth.currentSession();
+      const response = await axios.get('https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/categories',
+      {
+        headers: {
+          Authorization : `Bearer ${idToken.jwtToken}`
+          }
+      });
+
+      if (isMountedRef.current) {
+        setCategories(response.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMountedRef]);
 
   const getProducts = useCallback(async () => {
     try {
@@ -23,7 +42,6 @@ function ManagementProducts() {
           }
       });
       
-      console.log("response->", response);
       if (isMountedRef.current) {
         setProducts(response.data);
       }
@@ -31,10 +49,16 @@ function ManagementProducts() {
       console.error(err);
     }
   }, [isMountedRef]);
+  
 
   useEffect(() => {
+    getCategories();
     getProducts();
-  }, [getProducts]);
+    products.forEach((p) => {
+      p.categoryName = categories.find( c => c.sk === p.sk.split('/')[0]);
+      console.log(p)
+    })
+  }, [getProducts, getCategories]);
 
   return (
     <>
@@ -42,7 +66,7 @@ function ManagementProducts() {
         <title>Gestión de productos</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader handleAddProduct={setProducts}/>
+        <PageHeader handleAddProduct={setProducts} categories={categories}/>
       </PageTitleWrapper>
 
       <Grid
@@ -56,7 +80,7 @@ function ManagementProducts() {
         spacing={4}
       >
         <Grid item xs={12}>
-          <Results products={products} />
+          <Results products={products} categories={categories}/>
         </Grid>
       </Grid>
     </>

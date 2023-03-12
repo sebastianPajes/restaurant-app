@@ -45,7 +45,7 @@ function ManagementProducts() {
       
       if (isMountedRef.current) {
         response.data.forEach((p) => {
-          p.categoryName = categoriesResponse.find( c => c.sk === p.sk.split('/')[0]).name;
+          p.categoryName = categoriesResponse.find( c => c.sk === p.sk.split('/')[0])?.name;
         })
         setProducts(response.data);
       }

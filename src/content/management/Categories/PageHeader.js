@@ -231,7 +231,7 @@ function PageHeader({handleAddCategory}) {
               resetForm();
               setStatus({ success: true });
               setSubmitting(false);
-              handleCreateUserSuccess(newCategory);
+              handleCreateUserSuccess(response.data.categoryRes);
             } catch (err) {
               console.error(err);
               setStatus({ success: false });

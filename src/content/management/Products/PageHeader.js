@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-for */
-import { useEffect, useState } from 'react';
+import { useState,useCallback } from 'react';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
@@ -117,6 +117,7 @@ const ButtonUploadWrapper = styled(Box)(
 
 
 function PageHeader({handleAddProduct}) {
+  const isMountedRef = useRefMounted();
   const { t } = useTranslation();
   const {
     acceptedFiles,
@@ -139,7 +140,6 @@ function PageHeader({handleAddProduct}) {
       <Divider />
     </ListItem>
   ));
-
 
   const [open, setOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -166,12 +166,9 @@ function PageHeader({handleAddProduct}) {
     }
   }, [isMountedRef]);
 
-  useEffect(() => {
-    getCategories();      
-    },[getCategories]);
-
   const handleCreateUserOpen = () => {
     setOpen(true);
+    getCategories();
   };
 
   const handleCreateUserClose = () => {

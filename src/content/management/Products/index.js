@@ -42,7 +42,7 @@ function ManagementProducts() {
         <title>Gestión de productos</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+        <PageHeader handleAddProduct={setProducts}/>
       </PageTitleWrapper>
 
       <Grid

@@ -191,6 +191,9 @@ const Results = ({ categories }) => {
     });
   };
 
+  const handleVisibility = () => {
+    //update visi;
+   }
   return (
     <>
       <Card>
@@ -316,9 +319,9 @@ const Results = ({ categories }) => {
                         </TableCell>
                         <TableCell align="center">
                               <Toggle
-                                defaultChecked={true}
+                                defaultChecked={product.isVisibleInMenu}
                                 icons={false}
-                                onChange={handleConfirmDelete} />
+                                onChange={handleVisibility} />
                         </TableCell>
                         <TableCell align="center">
                           <Typography noWrap>
@@ -332,14 +335,14 @@ const Results = ({ categories }) => {
                               Editar
                             </Button>
                                                         
-                            <Tooltip title="Editar" arrow>
+                            {/* <Tooltip title="Editar" arrow>
                               <IconButton
                                 onClick={handleEditCategory}
                                 color="primary"
                               >
                                 <EditIcon fontSize="medium" />
                               </IconButton>
-                            </Tooltip>
+                            </Tooltip> */}
                             <Tooltip title="Eliminar" arrow>
                               <IconButton
                                 onClick={handleConfirmDelete}

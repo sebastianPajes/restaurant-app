@@ -116,7 +116,7 @@ const ButtonUploadWrapper = styled(Box)(
 );
 
 
-function PageHeader() {
+function PageHeader({handleAddProduct}) {
   const { t } = useTranslation();
   const {
     acceptedFiles,
@@ -145,17 +145,30 @@ function PageHeader() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useAuth();
   const theme = useTheme();
 
+  const getCategories = useCallback(async () => {
+    try {
+      const {idToken} = await Auth.currentSession();
+      const response = await axios.get('https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/categories',
+      {
+        headers: {
+          Authorization : `Bearer ${idToken.jwtToken}`
+          }
+      });
 
-  useEffect(()=>{
-      setCategories([
-        { name: 'TestCategory', id:"fa8d4de7-e815-4e1a-b50c-58ad65dc9fe8" },
-        { name: 'TestCategory2', id: "9f9da674-2677-4c13-928f-1e0900a8f671"}
-      ]);
-      
-    },[]);
+      console.log(response);
+      if (isMountedRef.current) {
+        setCategories(response.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMountedRef]);
+
+  useEffect(() => {
+    getCategories();      
+    },[getCategories]);
 
   const handleCreateUserOpen = () => {
     setOpen(true);
@@ -165,7 +178,7 @@ function PageHeader() {
     setOpen(false);
   };
 
-  const handleCreateUserSuccess = () => {
+  const handleCreateUserSuccess = (product) => {
     enqueueSnackbar('El producto fue creado exitosamente', {
       variant: 'success',
       anchorOrigin: {
@@ -176,6 +189,7 @@ function PageHeader() {
     });
 
     setOpen(false);
+    handleAddProduct(prev => [...prev, product]);
   };
 
   return (
@@ -227,13 +241,14 @@ function PageHeader() {
           ) => {
             try {
               const {idToken} = await Auth.currentSession();
-              const response = await axios.post(`https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/products`,
-              {
-                categoryId: selectedCategory.id,
+              const newProduct = {
+                categoryId: selectedCategory.sk.split('#')[1],
                 name: _values.name,
                 description: _values.description,
                 price: _values.price
-              },
+              };
+              const response = await axios.post(`https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/products`,
+              newProduct,
               {
                 headers: {
                   Authorization : `Bearer ${idToken.jwtToken}`
@@ -243,7 +258,7 @@ function PageHeader() {
               resetForm();
               setStatus({ success: true });
               setSubmitting(false);
-              handleCreateUserSuccess();
+              handleCreateUserSuccess(newProduct);
             } catch (err) {
               console.error(err);
               setStatus({ success: false });

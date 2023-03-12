@@ -294,7 +294,7 @@ const Results = ({ products, categories}) => {
                           <Box
                             pl={1}
                             sx={{
-                              width: 250
+                              width: 200
                             }}
                           >
                               {product.description}
@@ -315,7 +315,7 @@ const Results = ({ products, categories}) => {
                       </TableCell>
                       <TableCell>
                           <Typography>
-                            ${numeral(product.price).format(`S/.0,0.00`)}
+                              {`S/.${product.price}`}
                           </Typography>
 	                    </TableCell>
                       <TableCell align="center">

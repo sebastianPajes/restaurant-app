@@ -125,9 +125,6 @@ function PageHeader({handleAddCategory}) {
     acceptedFiles.forEach(file =>{
       const reader = new FileReader();
       reader.onload = (e) => {
-        if (!e.target.result.includes('data:image/jpeg')) {
-          return alert('Wrong file type - JPG only.')
-        }
        setImage(e.target.result);
       }
       reader.readAsDataURL(file);
@@ -243,12 +240,12 @@ function PageHeader({handleAddCategory}) {
                   }
                 }
               );
-              let binary = atob(image.split(',')[1])
-              let array = []
-              for (var i = 0; i < binary.length; i++) {
-                array.push(binary.charCodeAt(i))
-              }
-              let blobData = new Blob([new Uint8Array(array)], {type: 'image/jpeg'})
+              // let binary = atob(image.split(',')[1])
+              // let array = []
+              // for (var i = 0; i < binary.length; i++) {
+              //   array.push(binary.charCodeAt(i))
+              // }
+              let blobData = new Blob([new Uint8Array(image)], {type: image.type})
               const s3Response = await axios.put(s3SignedURL.uploadURL, blobData);
 
 

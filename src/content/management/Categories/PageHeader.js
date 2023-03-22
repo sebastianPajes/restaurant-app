@@ -216,9 +216,37 @@ function PageHeader({handleAddCategory}) {
           ) => {
             try {
               const {idToken} = await Auth.currentSession();
+              
+              //S3 code
+              const s3SignedURL = await axios.get(`https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/uploads/${acceptedFiles[0].name}`,
+              {
+                headers: {
+                  Authorization : `Bearer ${idToken.jwtToken}`
+                  }
+                }
+              );
+              let image;
+              let reader = new FileReader();
+              reader.onload = (e) => {
+                if (!e.target.result.includes('data:image/jpeg')) {
+                  return alert('Wrong file type - JPG only.')
+                }
+                image = e.target.result;
+              }
+              reader.readAsDataURL(acceptedFiles[0])
+              let binary = atob(image.split(',')[1])
+              let array = []
+              for (var i = 0; i < binary.length; i++) {
+                array.push(binary.charCodeAt(i))
+              }
+              let blobData = new Blob([new Uint8Array(array)], {type: 'image/jpeg'})
+              const s3Response = await axios.put(s3SignedURL.uploadURL, blobData);
+
+              
               const newCategory = {
                   name: _values.name,
-                  description: _values.description
+                  description: _values.description,
+                  assetKey:s3SignedURL.uploadURL.split('?')[0]
               }
               const response = await axios.post(`https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/categories`,
                 newCategory,

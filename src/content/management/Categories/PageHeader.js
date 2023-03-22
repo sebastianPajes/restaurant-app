@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-for */
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
@@ -117,6 +117,24 @@ const ButtonUploadWrapper = styled(Box)(
 
 
 function PageHeader({handleAddCategory}) {
+  
+  const [open, setOpen] = useState(false);
+  const [image, setImage] = useState(null);
+
+  const onDrop = useCallback((acceptedFiles, rejectFiles)=>{
+    acceptedFiles.forEach(file =>{
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (!e.target.result.includes('data:image/jpeg')) {
+          return alert('Wrong file type - JPG only.')
+        }
+       setImage(e.target.result);
+      }
+      reader.readAsDataURL(file);
+    });
+
+  });
+
   const { t } = useTranslation();
   const {
     acceptedFiles,
@@ -129,7 +147,8 @@ function PageHeader({handleAddCategory}) {
     accept: {
       'image/png': ['.png'],
       'image/jpeg': ['.jpg']
-    }
+    },
+    onDrop
   });
 
   const files = acceptedFiles.map((file, index) => (
@@ -141,7 +160,6 @@ function PageHeader({handleAddCategory}) {
   ));
 
 
-  const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const theme = useTheme();
@@ -225,15 +243,6 @@ function PageHeader({handleAddCategory}) {
                   }
                 }
               );
-              let image;
-              let reader = new FileReader();
-              reader.onload = (e) => {
-                if (!e.target.result.includes('data:image/jpeg')) {
-                  return alert('Wrong file type - JPG only.')
-                }
-                image = e.target.result;
-              }
-              reader.readAsDataURL(acceptedFiles[0])
               let binary = atob(image.split(',')[1])
               let array = []
               for (var i = 0; i < binary.length; i++) {
@@ -242,7 +251,7 @@ function PageHeader({handleAddCategory}) {
               let blobData = new Blob([new Uint8Array(array)], {type: 'image/jpeg'})
               const s3Response = await axios.put(s3SignedURL.uploadURL, blobData);
 
-              
+
               const newCategory = {
                   name: _values.name,
                   description: _values.description,

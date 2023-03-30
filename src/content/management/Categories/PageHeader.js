@@ -245,6 +245,7 @@ function PageHeader({handleAddCategory}) {
               // for (var i = 0; i < binary.length; i++) {
               //   array.push(binary.charCodeAt(i))
               // }
+              console.log(s3SignedURL);
               let blobData = new Blob([new Uint8Array(image)], {type: acceptedFiles[0].type})
               const s3Response = await axios.put(s3SignedURL.uploadURL, blobData);
 

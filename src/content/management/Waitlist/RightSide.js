@@ -22,18 +22,12 @@ import Text from 'src/components/Text';
 
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
-import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 import KeyboardArrowDownTwoToneIcon from '@mui/icons-material/KeyboardArrowDownTwoTone';
 
 import Scrollbar from 'src/components/Scrollbar';
-import ArrowForwardTwoToneIcon from '@mui/icons-material/ArrowForwardTwoTone';
 import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
 
 const BoxComposed = styled(Box)(
@@ -108,7 +102,7 @@ function RighSide() {
   const { t } = useTranslation();
   const theme = useTheme();
 
-  const [currentTab, setCurrentTab] = useState('timeline');
+  const [currentTab, setCurrentTab] = useState('details');
 
   const tabs = [
     { value: 'details', label: 'Detalles' },
@@ -118,66 +112,6 @@ function RighSide() {
   const handleTabsChange = (_event, value) => {
     setCurrentTab(value);
   };
-
-  const chart1Options = {
-    chart: {
-      toolbar: {
-        show: false
-      },
-      sparkline: {
-        enabled: true
-      },
-      stacked: true
-    },
-    dataLabels: {
-      enabled: true
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        borderRadius: 5,
-        columnWidth: '65%'
-      }
-    },
-    stroke: {
-      show: false,
-      width: 0,
-      colors: ['transparent']
-    },
-    theme: {
-      mode: theme.palette.mode
-    },
-    colors: [theme.colors.secondary.dark, theme.colors.secondary.light],
-    fill: {
-      opacity: 1
-    },
-    labels: [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-      'Last week',
-      'Last month',
-      'Last year',
-      'Last quarter'
-    ],
-    legend: {
-      show: false
-    }
-  };
-  const chart1Data = [
-    {
-      name: 'Net Profit',
-      data: [2.3, 3.1, 4.0, 3.8, 5.1, 3.6, 4.0, 3.8, 5.1, 3.6, 3.2]
-    },
-    {
-      name: 'Net Loss',
-      data: [2.1, 2.1, 3.0, 2.8, 4.0, 3.8, 5.1, 3.6, 4.1, 2.6, 1.2]
-    }
-  ];
 
   return (
     <Card>
@@ -264,10 +198,10 @@ function RighSide() {
                   <CheckTwoToneIcon fontSize="large" />
                 </AvatarSuccess>
                 <Typography variant="h3" gutterBottom>
-                  {t('Incoming messages')}
+                  Pendientes
                 </Typography>
                 <Typography variant="subtitle2">
-                  {t("You don't have any pending actions to look at.")}
+                  No existen notificaciones pendientes.
                 </Typography>
               </Box>
             </Scrollbar>
@@ -280,13 +214,13 @@ function RighSide() {
           textAlign: 'center'
         }}
       >
-          <Button variant="contained" endIcon={<ArrowForwardTwoToneIcon />}>
+          <Button variant="contained">
             Editar
           </Button>
-          <Button variant="contained" endIcon={<ArrowForwardTwoToneIcon />}>
+          <Button variant="contained" >
             Mesa
           </Button>
-          <Button variant="contained" endIcon={<ArrowForwardTwoToneIcon />}>
+          <Button variant="contained" >
             Sentar
           </Button>
       </Box>

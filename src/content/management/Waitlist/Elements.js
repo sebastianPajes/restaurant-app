@@ -137,9 +137,7 @@ function Elements() {
             // onClick={handleCreateUserOpen}
             variant="contained"
             startIcon={<AddTwoToneIcon fontSize="small" />}
-          >
-            +
-          </Button>
+          />
         </IconButton>
       </Box>
       <List disablePadding>

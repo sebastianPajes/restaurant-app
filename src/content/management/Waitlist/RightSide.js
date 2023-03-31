@@ -111,9 +111,8 @@ function RighSide() {
   const [currentTab, setCurrentTab] = useState('timeline');
 
   const tabs = [
-    { value: 'timeline', label: t('Timeline') },
-    { value: 'tasks', label: t('Tasks') },
-    { value: 'reports', label: t('Reports') }
+    { value: 'details', label: 'Detalles' },
+    { value: 'notifications', label: 'Notificaciones' },
   ];
 
   const handleTabsChange = (_event, value) => {
@@ -207,7 +206,7 @@ function RighSide() {
           ))}
         </TabsWrapper>
       </Box>
-      {currentTab === 'detalles' && (
+      {currentTab === 'details' && (
         <Box
           sx={{
             height: 300
@@ -240,7 +239,7 @@ function RighSide() {
           </Scrollbar>
         </Box>
       )}
-      {currentTab === 'notificationes' && (
+      {currentTab === 'notifications' && (
         <>
           <Box
             sx={{

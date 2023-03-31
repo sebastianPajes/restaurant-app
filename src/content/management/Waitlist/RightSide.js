@@ -13,6 +13,7 @@ import {
   AvatarGroup,
   Tab,
   Tabs,
+  Grid,
   Badge,
   Button,
   styled,
@@ -25,7 +26,8 @@ import TimelineItem from '@mui/lab/TimelineItem';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
-import KeyboardArrowDownTwoToneIcon from '@mui/icons-material/KeyboardArrowDownTwoTone';
+import PersonTwoToneIcon from '@mui/icons-material/PersonTwoTone';
+
 
 import Scrollbar from 'src/components/Scrollbar';
 import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
@@ -97,6 +99,11 @@ const TabsWrapper = styled(Tabs)(
         }
     `
 );
+const CardWrapper = styled(Card)(
+  ({ theme }) => `
+      background: ${alpha(theme.colors.alpha.black[10], 0.05)};
+  `
+);
 
 function RighSide() {
   const { t } = useTranslation();
@@ -167,9 +174,28 @@ function RighSide() {
                 Nota
               </TimelineItem>
             </Timeline>
-            IconButton
-            IconButton
-            IconButton
+          <Grid container spacing={6}>
+            <Grid item xs={12} sm={4}>
+              <CardWrapper
+                elevation={0}
+                sx={{
+                  textAlign: 'center',
+                  pt: 3,
+                  pb: 2.5
+                }}
+              >
+                <PersonTwoToneIcon fontSize="large" />
+                <Typography
+                  variant="h4"
+                  sx={{
+                    pt: 1
+                  }}
+                >
+                  4
+                </Typography>
+              </CardWrapper>
+            </Grid>
+          </Grid>
           </Scrollbar>
         </Box>
       )}

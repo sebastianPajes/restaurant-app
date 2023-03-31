@@ -17,7 +17,7 @@ function ManagementProducts() {
   const getCategories = useCallback(async () => {
     try {
       const {idToken} = await Auth.currentSession();
-      const response = await axios.get('https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/categories',
+      const response = await axios.get('https://gfze94t8g3.execute-api.us-east-1.amazonaws.com/prod/api/categories',
       {
         headers: {
           Authorization : `Bearer ${idToken.jwtToken}`
@@ -36,7 +36,7 @@ function ManagementProducts() {
   const getProducts = useCallback(async (categoriesResponse) => {
     try {
       const {idToken} = await Auth.currentSession();
-      const response = await axios.get('https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/products',
+      const response = await axios.get('https://gfze94t8g3.execute-api.us-east-1.amazonaws.com/prod/api/products',
       {
         headers: {
           Authorization : `Bearer ${idToken.jwtToken}`

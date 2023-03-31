@@ -11,6 +11,7 @@ import outsideItems from '../layouts/Sidebar/SidebarMenu/outsideItems';
 import { Suspense, lazy } from 'react';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
+import Waitlist from 'src/content/management/Waitlist';
 
 const Loader = (Component) => (props) =>
   (
@@ -42,6 +43,10 @@ const router = [
       {
         path: 'productos',
         element: <Products/>
+      },
+      {
+        path:'waitlist',
+        element:<Waitlist/>
       }
     ]
   },

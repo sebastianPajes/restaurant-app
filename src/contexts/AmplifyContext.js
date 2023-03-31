@@ -95,7 +95,7 @@ export const AuthProvider = (props) => {
     console.log("login:",user);
     console.log("token: ",`Bearer ${user.signInUserSession.idToken.jwtToken}`);
     
-    const response = await axios.get(`https://7himojg8g9.execute-api.us-east-1.amazonaws.com/prod/api/employees/${user.username}`,
+    const response = await axios.get(`https://gfze94t8g3.execute-api.us-east-1.amazonaws.com/prod/api/employees/${user.username}`,
     {
       headers: {
         Authorization : `Bearer ${user.signInUserSession.idToken.jwtToken}`

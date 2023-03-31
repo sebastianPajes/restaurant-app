@@ -93,7 +93,6 @@ export const AuthProvider = (props) => {
 
   const login = async (user) => {
     console.log("login:",user);
-    console.log("token: ",`Bearer ${user.signInUserSession.idToken.jwtToken}`);
     
     const response = await axios.get(`${process.env.REACT_APP_API}api/employees/${user.username}`,
     {

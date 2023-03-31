@@ -33,10 +33,13 @@ const router = [
     element: (
       <Authenticated>
         <SidebarLayout items={outsideItems}/>
-        <Navigate to="waitlist" replace />
       </Authenticated>
     ),
     children: [
+      {
+        path: '/',
+        element: <Navigate to="waitlist" replace />
+      },
       {
         path: 'categorias',
         element: <Categories/>

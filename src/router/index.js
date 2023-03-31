@@ -1,5 +1,5 @@
 import Authenticated from 'src/components/Authenticated';
-// import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import SidebarLayout from 'src/layouts/';
 
@@ -33,6 +33,7 @@ const router = [
     element: (
       <Authenticated>
         <SidebarLayout items={outsideItems}/>
+        <Navigate to="waitlist" replace />
       </Authenticated>
     ),
     children: [

@@ -233,7 +233,7 @@ function PageHeader({handleAddCategory}) {
               const {idToken} = await Auth.currentSession();
               
               //S3 code
-              const s3SignedURL = await axios.get(`https://gfze94t8g3.execute-api.us-east-1.amazonaws.com/prod/api/uploads/${acceptedFiles[0].name}`,
+              const s3SignedURL = await axios.get(`${process.env.REACT_APP_API}api/uploads/${acceptedFiles[0].name}`,
               {
                 headers: {
                   Authorization : `Bearer ${idToken.jwtToken}`
@@ -255,7 +255,7 @@ function PageHeader({handleAddCategory}) {
                   description: _values.description,
                   assetKey:s3SignedURL.uploadURL.split('?')[0]
               }
-              const response = await axios.post(`https://gfze94t8g3.execute-api.us-east-1.amazonaws.com/prod/api/categories`,
+              const response = await axios.post(`${process.env.REACT_APP_API}api/categories`,
                 newCategory,
               {
                 headers: {

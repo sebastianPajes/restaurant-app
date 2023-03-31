@@ -227,7 +227,7 @@ function PageHeader({handleAddProduct, categories}) {
                 description: _values.description,
                 price: _values.price
               };
-              const response = await axios.post(`https://gfze94t8g3.execute-api.us-east-1.amazonaws.com/prod/api/products`,
+              const response = await axios.post(`${process.env.REACT_APP_API}api/products`,
               newProduct,
               {
                 headers: {

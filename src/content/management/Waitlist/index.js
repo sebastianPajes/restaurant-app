@@ -35,8 +35,23 @@ function Waitlist() {
       <Helmet>
         <title>Lista de espera</title>
       </Helmet>
-     <Elements/>
-     <RighSide/>
+      <Grid
+        sx={{
+          px: 4
+        }}
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="stretch"
+        spacing={4}
+      >
+        <Grid item md={6} xs={12}>
+          <Elements/>
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <RighSide/>
+        </Grid>
+      </Grid>
     </>
   );
 }

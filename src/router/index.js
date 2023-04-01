@@ -77,7 +77,7 @@ const router = [
     ),
     children: [
       {
-        path: '/',
+        path: '',
         element: <Navigate to="empleados" replace />
       },
       {

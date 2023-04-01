@@ -8,22 +8,22 @@ const menuItems = [
       {
         name: 'Información General',
         icon: BackupTableTwoToneIcon,
-        link: 'gestion/informacion-general',
+        link: 'informacion-general',
       },
       {
         name: 'Empleados',
         icon: PeopleOutlineTwoToneIcon,
-        link: 'gestion/empleados',
+        link: 'empleados',
       },
       {
         name: 'Mesas',
         icon: TableRestaurantTwoToneIcon,
-        link: 'gestion/mesas',
+        link: 'mesas',
       },
       {
         name: 'QRs',
         icon: QrCodeTwoToneIcon,
-        link: 'gestion/qrs',
+        link: 'qrs',
       }
     ]
   }

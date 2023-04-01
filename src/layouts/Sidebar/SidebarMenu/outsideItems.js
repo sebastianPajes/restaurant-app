@@ -29,11 +29,6 @@ const menuItems = [
         link: 'productos',
       },
       {
-        name: 'Empleados',
-        icon: PeopleOutlineOutlinedIcon,
-        link: 'empleados',
-      },
-      {
         name: 'Categorías',
         icon: CategoryOutlinedIcon,
         link: 'categorias',

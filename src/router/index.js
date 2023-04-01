@@ -50,10 +50,6 @@ const router = [
         element: <Products/>
       },
       {
-        path: 'empleados',
-        element: <Users/>
-      },
-      {
         path:'waitlist',
         children:[
           {

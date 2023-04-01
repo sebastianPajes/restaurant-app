@@ -18,58 +18,10 @@ import {
   linearProgressClasses
 } from '@mui/material';
 
-import { useTranslation } from 'react-i18next';
-import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import Text from 'src/components/Text';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
-const LinearProgressError = styled(LinearProgress)(
-  ({ theme }) => `
-        height: 6px;
-        border-radius: ${theme.general.borderRadiusLg};
-
-        &.${linearProgressClasses.colorPrimary} {
-            background: ${alpha(theme.colors.alpha.black[100], 0.1)};
-        }
-        
-        & .${linearProgressClasses.bar} {
-            border-radius: ${theme.general.borderRadiusLg};
-            background: ${theme.colors.gradients.purple3};
-        }
-    `
-);
-
-const LinearProgressWarning = styled(LinearProgress)(
-  ({ theme }) => `
-        height: 6px;
-        border-radius: ${theme.general.borderRadiusLg};
-
-        &.${linearProgressClasses.colorPrimary} {
-            background: ${alpha(theme.colors.alpha.black[100], 0.1)};
-        }
-        
-        & .${linearProgressClasses.bar} {
-            border-radius: ${theme.general.borderRadiusLg};
-            background: ${theme.colors.gradients.orange1};
-        }
-    `
-);
-
-const LinearProgressSuccess = styled(LinearProgress)(
-  ({ theme }) => `
-        height: 6px;
-        border-radius: ${theme.general.borderRadiusLg};
-
-        &.${linearProgressClasses.colorPrimary} {
-            background: ${alpha(theme.colors.alpha.black[100], 0.1)};
-        }
-        
-        & .${linearProgressClasses.bar} {
-            border-radius: ${theme.general.borderRadiusLg};
-            background: ${theme.colors.gradients.green1};
-        }
-    `
-);
 
 const ListItemButtonWrapper = styled(ListItemButton)(
   ({ theme }) => `
@@ -94,8 +46,8 @@ const ListItemButtonWrapper = styled(ListItemButton)(
 );
 
 function Elements() {
-  const { t } = useTranslation();
   const theme = useTheme();
+  const location = useLocation();
 
   return (
     <Card
@@ -128,13 +80,15 @@ function Elements() {
             }
           }}
         >
-          {/* <MoreVertTwoToneIcon fontSize="small" /> */}
-
           <Button
             sx={{
               mt: { xs: 2, sm: 0 }
             }}
             // onClick={handleCreateUserOpen}
+            component={RouterLink}
+            to={`/${
+              location.pathname.split('/')[1]
+            }/registro`}
             variant="contained"
             startIcon={<AddTwoToneIcon fontSize="small" />}
           />

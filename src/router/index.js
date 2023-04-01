@@ -12,6 +12,7 @@ import { Suspense, lazy } from 'react';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import Waitlist from 'src/content/management/Waitlist';
+import Add from 'src/content/management/Waitlist/Add';
 
 const Loader = (Component) => (props) =>
   (
@@ -50,8 +51,14 @@ const router = [
       },
       {
         path:'waitlist',
-        element:<Waitlist/>
-      }
+        element:<Waitlist/>,
+        children:[
+          {
+            path:'registro',
+            element:<Add/>
+          }
+        ]
+      },
     ]
   },
   {

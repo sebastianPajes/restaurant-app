@@ -51,8 +51,11 @@ const router = [
       },
       {
         path:'waitlist',
-        element:<Waitlist/>,
         children:[
+          {
+            path:'',
+            element:<Waitlist/>,
+          },
           {
             path:'registro',
             element:<Add/>

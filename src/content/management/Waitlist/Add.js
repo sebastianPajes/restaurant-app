@@ -9,18 +9,14 @@ import {
   DialogActions,
   DialogContent,
   Box,
-  Zoom,
   Typography,
   Divider,
   TextField,
   CircularProgress,
-  Switch,
-  Avatar,
   Autocomplete,
   IconButton,
   ListItem,
   ListItemText,
-  Alert,
   List,
   Button,
   useTheme
@@ -34,7 +30,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 function Add(){
     const theme = useTheme();
-
+    console.log("im add");
 return (
     <Formik
     initialValues={{

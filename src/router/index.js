@@ -50,6 +50,10 @@ const router = [
         element: <Products/>
       },
       {
+        path: 'empleados',
+        element: <Users/>
+      },
+      {
         path:'waitlist',
         children:[
           {
@@ -72,6 +76,10 @@ const router = [
       </Authenticated>
     ),
     children: [
+      {
+        path: '/',
+        element: <Navigate to="empleados" replace />
+      },
       {
         path: 'empleados',
         element: <Users />

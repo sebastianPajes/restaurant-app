@@ -91,9 +91,7 @@ export const AuthProvider = (props) => {
   //   initialize();
   // }, []);
 
-  const login = async (user) => {
-    console.log("login:",user);
-    
+  const login = async (user) => {  
     const response = await axios.get(`${process.env.REACT_APP_API}api/employees/${user.username}`,
     {
       headers: {
@@ -101,7 +99,8 @@ export const AuthProvider = (props) => {
         }
       }
     );
-    const {employeeRes} = response.data;
+    const { employee: employeeRes } = response.data.data;
+  
     dispatch({
       type: 'LOGIN',
       payload: {
@@ -113,6 +112,7 @@ export const AuthProvider = (props) => {
         }
       }
     });
+    console.log(employeeRes)
     localStorage.setItem('firstName',employeeRes.firstName);
     localStorage.setItem('lastName',employeeRes.lastName);
   };

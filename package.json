@@ -17,6 +17,7 @@
     "axios-mock-adapter": "^1.21.1",
     "bootstrap": "^5.2.2",
     "date-fns": "^2.28.0",
+    "dotenv": "^16.0.3",
     "formik": "^2.2.9",
     "notistack": "^2.0.8",
     "nprogress": "^0.2.0",

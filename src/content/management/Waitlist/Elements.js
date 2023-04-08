@@ -17,7 +17,6 @@ import {
   useTheme,
   linearProgressClasses
 } from '@mui/material';
-
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import Text from 'src/components/Text';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
@@ -45,7 +44,7 @@ const ListItemButtonWrapper = styled(ListItemButton)(
   `
 );
 
-function Elements() {
+function Elements({parties}) {
   const theme = useTheme();
   const location = useLocation();
 
@@ -96,62 +95,65 @@ function Elements() {
       </Box>
       <List disablePadding>
         <Divider />
-        {/*TODO:map*/}
-        <ListItemButtonWrapper
-          sx={{
-            display: { xs: 'block', sm: 'flex' },
-            py: 2,
-            px: 2.5
-          }}
-        >
-          <ListItemAvatar
-            sx={{
-              minWidth: 'auto',
-              mr: 2,
-              mb: { xs: 2, sm: 0 }
-            }}
-          >
-              <Avatar
+          {
+          parties?.map( p =>{
+            return (<ListItemButtonWrapper
+              sx={{
+                display: { xs: 'block', sm: 'flex' },
+                py: 2,
+                px: 2.5
+              }}
+            >
+              <ListItemAvatar
                 sx={{
-                  fontSize: `${theme.typography.pxToRem(15)}`,
-                  background: `${theme.colors.warning.main}`,
-                  color: `${theme.palette.getContrastText(
-                    theme.colors.warning.dark
-                  )}`,
-                  width: 56,
-                  height: 56
+                  minWidth: 'auto',
+                  mr: 2,
+                  mb: { xs: 2, sm: 0 }
                 }}
               >
-                number
-              </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            disableTypography
-            primary={
-              <Typography color="text.primary" variant="h5">
-                 PartyName
-              </Typography>
-            }
-            secondary={
-              <>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <Typography
+                  <Avatar
                     sx={{
-                      fontSize: `${theme.typography.pxToRem(12)}`
+                      fontSize: `${theme.typography.pxToRem(15)}`,
+                      background: `${theme.colors.warning.main}`,
+                      color: `${theme.palette.getContrastText(
+                        theme.colors.warning.dark
+                      )}`,
+                      width: 56,
+                      height: 56
                     }}
-                    variant="subtitle2"
                   >
-                    <Text color="success">Note</Text>
+                    {p.customer.partySize}
+                  </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                disableTypography
+                primary={
+                  <Typography color="text.primary" variant="h5">
+                    {p.customer.name}
                   </Typography>
-                </Box>
-              </>
-            }
-          />
-        </ListItemButtonWrapper>
+                }
+                secondary={
+                  <>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: `${theme.typography.pxToRem(12)}`
+                        }}
+                        variant="subtitle2"
+                      >
+                        <Text color="success">Note</Text>
+                      </Typography>
+                    </Box>
+                  </>
+                }
+              />
+               </ListItemButtonWrapper>)
+              })
+          }
       </List>
     </Card>
   );

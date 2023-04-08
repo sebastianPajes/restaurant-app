@@ -233,27 +233,27 @@ function PageHeader({handleAddCategory}) {
               const {idToken} = await Auth.currentSession();
               
               //S3 code
-              const s3SignedURL = await axios.get(`${process.env.REACT_APP_API}api/uploads/${acceptedFiles[0].name}`,
-              {
-                headers: {
-                  Authorization : `Bearer ${idToken.jwtToken}`
-                  }
-                }
-              );
-              // let binary = atob(image.split(',')[1])
+              const s3SignedURL = undefined//await axios.get(`${process.env.REACT_APP_API}api/uploads/${acceptedFiles[0]?.name}`,
+              // {
+              //   headers: {
+              //     Authorization : `Bearer ${idToken.jwtToken}`
+              //     }
+              //   }
+              // );
+             // // let binary = atob(image.split(',')[1])
               // let array = []
               // for (var i = 0; i < binary.length; i++) {
               //   array.push(binary.charCodeAt(i))
-              // }
-              console.log(s3SignedURL);
-              let blobData = new Blob([new Uint8Array(image)], {type: acceptedFiles[0].type})
-              const s3Response = await axios.put(s3SignedURL.uploadURL, blobData);
+             // // }
+              // console.log(s3SignedURL);
+              // let blobData = new Blob([new Uint8Array(image)], {type: acceptedFiles[0]?.type})
+              // const s3Response = await axios.put(s3SignedURL.uploadURL, blobData);
 
 
               const newCategory = {
                   name: _values.name,
                   description: _values.description,
-                  assetKey:s3SignedURL.uploadURL.split('?')[0]
+                  assetKey:s3SignedURL?.uploadURL.split('?')[0]
               }
               const response = await axios.post(`${process.env.REACT_APP_API}api/categories`,
                 newCategory,

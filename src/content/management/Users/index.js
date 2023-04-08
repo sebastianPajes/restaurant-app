@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'src/utils/axios';
-
+import axios from 'axios';
+import { Auth } from 'aws-amplify';
 import { Helmet } from 'react-helmet-async';
 import PageHeader from './PageHeader';
 
@@ -13,14 +13,20 @@ import Results from './Results';
 
 function ManagementUsers() {
   const isMountedRef = useRefMounted();
-  const [users, setUsers] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
-  const getUsers = useCallback(async () => {
+  const getEmployees = useCallback(async () => {
     try {
-      const response = await axios.get('/api/employees');
+      const {idToken} = await Auth.currentSession();
+      const response = await axios.get(`${process.env.REACT_APP_API}api/employees`,
+      {
+        headers: {
+          Authorization : `Bearer ${idToken.jwtToken}`
+          }
+        });
 
       if (isMountedRef.current) {
-        setUsers(response.data.employee);
+        setEmployees(response.data.employees);
       }
     } catch (err) {
       console.error(err);
@@ -28,8 +34,8 @@ function ManagementUsers() {
   }, [isMountedRef]);
 
   useEffect(() => {
-    getUsers();
-  }, [getUsers]);
+    getEmployees();
+  }, [getEmployees]);
 
   return (
     <>
@@ -51,7 +57,7 @@ function ManagementUsers() {
         spacing={4}
       >
         <Grid item xs={12}>
-          <Results users={users} />
+          <Results users={employees} />
         </Grid>
       </Grid>
     </>

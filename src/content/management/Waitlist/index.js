@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'src/utils/axios';
+import axios from 'axios';
+import { Auth } from 'aws-amplify';
 
 import { Helmet } from 'react-helmet-async';
 
@@ -14,12 +15,18 @@ function Waitlist() {
   const isMountedRef = useRefMounted();
   const [parties, setParties] = useState([]);
 
-  const getUsers = useCallback(async () => {
+  const getParties = useCallback(async () => {
     try {
-      const response = await axios.get('/api/parties/booking');
+      const {idToken} = await Auth.currentSession();
+      const response = await axios.get(`${process.env.REACT_APP_API}api/parties/booking`,
+      {
+        headers: {
+          Authorization : `Bearer ${idToken.jwtToken}`
+          }
+        });
 
       if (isMountedRef.current) {
-        setParties(response.data.employee);
+        setParties(response.data.data.parties);
       }
     } catch (err) {
       console.error(err);
@@ -27,8 +34,8 @@ function Waitlist() {
   }, [isMountedRef]);
 
   useEffect(() => {
-    // getUsers();
-  }, [getUsers]);
+    getParties();
+  }, [getParties]);
 
   return (
     <>
@@ -46,7 +53,7 @@ function Waitlist() {
         spacing={4}
       >
         <Grid item md={6} xs={12}>
-          <Elements/>
+          <Elements parties={parties}/>
         </Grid>
         <Grid item md={6} xs={12}>
           <RighSide/>

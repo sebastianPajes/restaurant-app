@@ -23,12 +23,14 @@ import {
   useTheme
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-import DatePicker from '@mui/lab/DatePicker';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import DescriptionIcon from '@mui/icons-material/Description';
 import PeopleIcon from '@mui/icons-material/People';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import TableRestaurantTwoToneIcon from '@mui/icons-material/TableRestaurantTwoTone';
+import TimelapseIcon from '@mui/icons-material/Timelapse';
+import DatePicker from '@mui/lab/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers';
 
 import InputAdornment from '@mui/material/InputAdornment';
 
@@ -66,19 +68,23 @@ function Add(){
     }, [isMountedRef]);;
 
     
-  useEffect(() => {
-    getTables();
-  }, [getTables]);
+    useEffect(() => {
+      getTables();
+    }, [getTables]);
     
     
-  return (
+    return (
       <Formik
       initialValues={{
         name: '',
         phone: '',
         partySize:0,
-        note:'',
+        tableCodes:[],
+        // tags:[],
+        notes:'',
         duration:0,
+        date:'',
+        time:'',
         waitingTime:'',
         dateTime:'',
         submit: null
@@ -86,30 +92,35 @@ function Add(){
       onSubmit={async (
         _values,
         { resetForm, setErrors, setStatus, setSubmitting }
-      ) => {
-        try {
-          const {idToken} = await Auth.currentSession();
-          const newProduct = {
+        ) => {
+          try {
+            const {idToken} = await Auth.currentSession();
+            let newProduct = {
               source:"manual",
               customer:{
                 name: _values.name,
                 phone: _values.phone,
-                partySize: _values.partySize,
+                partySize: parseInt(_values.partySize),
               } ,
-              //   categoryId: selectedCategory.sk.split('#')[1],
-              // note: _values.note,
-              //only for booking
-              duration:_values.duration,
-              dateTime: _values.dateTime,
-              //only for waitlist
-              waitingTime: _values.waitingTime, 
-          };
+              tableCodes: [selectedTable.sk.split('#')[1]],
+              tags: [tableType],//TODO: make sure
+              notes: _values.notes,
+            };
+            if(partyType === "booking"){  //only for booking
+              newProduct.duration = parseInt(_values.duration);
+              const reservationDateTime = new Date(reservationDate.toISOString().split('T')[0] + 'T' + reservationHour.toISOString().split('T')[1]);
+              // console.log(test);
+              // console.log(test.toISOString());
+              newProduct.dateTime = reservationDateTime ;
+            }else{//only for waitlist
+            newProduct.waitingTime =  _values.waitingTime; 
+          }
           const response = await axios.post(`${process.env.REACT_APP_API}api/parties/${partyType}`,
           newProduct,
           {
             headers: {
               Authorization : `Bearer ${idToken.jwtToken}`
-              }
+            }
           }
           );
           resetForm();
@@ -123,7 +134,7 @@ function Add(){
           setSubmitting(false);
         }
       }}
-    >
+      >
       {({
         errors,
         handleBlur,
@@ -139,7 +150,7 @@ function Add(){
             sx={{
               p: 3
             }}
-          >
+            >
             <Grid container spacing={1}>
             <Grid  item
                     xs={12}
@@ -147,12 +158,12 @@ function Add(){
                     md={9} >
               <Button variant="outlined" sx={{width:'50%'}}
                 onClick ={()=> setPartyType('waitlist')}
-              >  
+                >  
               Walk-in
               </Button>
               <Button variant="outlined" sx={{width:'50%'}}
                 onClick ={()=> setPartyType('booking')}
-              >
+                >
                 Reserva
               </Button>
             </Grid>
@@ -259,14 +270,14 @@ function Add(){
                             </InputAdornment>
                           ),
                         }}
-                      error={Boolean(touched.note && errors.note)}
+                      error={Boolean(touched.notes && errors.notes)}
                       fullWidth
-                      helperText={touched.note && errors.note}
+                      helperText={touched.notes && errors.notes}
                       label="Notas"
-                      name="note"
+                      name="notes"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.note}
+                      value={values.notes}
                       variant="outlined"
                     />
                 </Grid>
@@ -290,7 +301,7 @@ function Add(){
                                     }}
                                   error={Boolean(touched.waitingTime && errors.waitingTime)}
                                   helperText={touched.waitingTime && errors.waitingTime}
-                                  label="Tiempo de espera"
+                                  label="Rango de tiempo aproximado de espera"
                                   name="waitingTime"
                                   onBlur={handleBlur}
                                   onChange={handleChange}
@@ -299,6 +310,7 @@ function Add(){
                                 />
                             </Grid>
                   :
+                  <>
                           <Grid
                           sx={{
                             mb: `${theme.spacing(3)}`
@@ -310,8 +322,10 @@ function Add(){
                         >
                             <DatePicker
                               value={reservationDate}
+                              label="Fecha para la reserva"
                               onChange={(newValue) => {
                                 setReservationDate(newValue);
+                                // console.log("fecha: ", newValue.toLocalDateString());
                               }}
                               renderInput={(params) => (
                                 <TextField
@@ -322,6 +336,60 @@ function Add(){
                               )}
                     />
                       </Grid>
+                          <Grid
+                          sx={{
+                            mb: `${theme.spacing(3)}`
+                          }}
+                          item
+                          xs={12}
+                          sm={8}
+                          md={9}
+                        >
+                            <TimePicker 
+                              ampm={false}
+                              value={reservationHour}
+                              label="Hora para la reserva"
+                              onChange={(newValue) => {
+                                setReservationHour(newValue);
+                                // console.log("hora: ", newValue.toLocalDateString());
+                              }}
+                              renderInput={(params) => (
+                                <TextField
+                                {...params}
+                                  placeholder="Seleccione una hora (formato 24 horas)"
+                                  // TODO: latin date format
+                                />
+                              )}
+                            />
+                      </Grid>
+                      <Grid
+                          sx={{
+                            mb: `${theme.spacing(3)}`
+                          }}
+                          item
+                          xs={12}
+                          sm={8}
+                          md={9}
+                        >
+                          <TextField
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <TimelapseIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                            error={Boolean(touched.duration && errors.duration)}
+                            helperText={touched.duration && errors.duration}
+                            label="Duración"
+                            name="duration"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.duration}
+                            variant="outlined"
+                          />
+                    </Grid>
+                    </>
                 }
 
               <Grid

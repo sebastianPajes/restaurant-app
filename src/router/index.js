@@ -3,7 +3,6 @@ import { Navigate } from 'react-router-dom';
 
 import SidebarLayout from 'src/layouts/';
 
-import internalManagementRoutes from './internalManagement';
 import insideItems from '../layouts/Sidebar/SidebarMenu/insideItems';
 import outsideItems from '../layouts/Sidebar/SidebarMenu/outsideItems';
 
@@ -13,6 +12,7 @@ import { Suspense, lazy } from 'react';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import Waitlist from 'src/content/management/Waitlist';
 import Add from 'src/content/management/Waitlist/Add';
+import EmployeeList from 'src/content/management/Employees/EmployeeList';
 
 const Loader = (Component) => (props) =>
   (
@@ -62,6 +62,15 @@ const router = [
           }
         ]
       },
+      {
+        path: 'employees',
+        children: [
+          {
+            path: '',
+            element: <EmployeeList/>
+          }
+        ]
+      }
     ]
   },
   {

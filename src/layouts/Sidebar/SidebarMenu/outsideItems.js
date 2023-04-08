@@ -34,6 +34,11 @@ const menuItems = [
         link: 'categorias',
       },
       {
+        name: 'Empleados',
+        icon: PeopleOutlineOutlinedIcon,
+        link: 'employees',
+      },
+      {
         name: 'Historial',
         icon: HistoryOutlinedIcon,
         link: 'historial',

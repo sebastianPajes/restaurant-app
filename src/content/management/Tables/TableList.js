@@ -169,6 +169,7 @@ function TableList() {
         <TableHead>
           <TableRow>
             <TableCell>Código</TableCell>
+            <TableCell>Ocupado</TableCell> 
             <TableCell>Tamaño</TableCell>
             <TableCell>Acciones</TableCell>
           </TableRow>
@@ -177,6 +178,9 @@ function TableList() {
           {tables.map(table => (
             <TableRow key={table.code} style={editingRows.includes(table.code) ? styles.editedRow : null}>
               <TableCell>{table.code}</TableCell>
+              <TableCell>
+                {table.partyId ? 'Sí' : 'No'}
+              </TableCell>
               <TableCell>
                 {editingRows.includes(table.code) ? (
                   <input type="number" name="size" value={editData.size} onChange={(e) => handleEditInputChange(table.code, e)} />
@@ -203,6 +207,7 @@ function TableList() {
             <TableCell>
               <input type="text" name="code" value={newTable.code} onChange={handleInputChange} onFocus={clearError} />
             </TableCell>
+            <TableCell>No</TableCell>
             <TableCell>
               <input type="number" name="size" value={newTable.size} onChange={handleInputChange} onFocus={clearError}  />
             </TableCell>

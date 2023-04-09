@@ -13,6 +13,7 @@ import {
   Typography,
   Divider,
   TextField,
+  Zoom,
   CircularProgress,
   Autocomplete,
   IconButton,
@@ -30,6 +31,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import TableRestaurantTwoToneIcon from '@mui/icons-material/TableRestaurantTwoTone';
 import TimelapseIcon from '@mui/icons-material/Timelapse';
 import DatePicker from '@mui/lab/DatePicker';
+import { useSnackbar } from 'notistack';
 import { TimePicker } from '@mui/x-date-pickers';
 
 import InputAdornment from '@mui/material/InputAdornment';
@@ -40,14 +42,13 @@ import useRefMounted from 'src/hooks/useRefMounted';
 function Add(){
     const theme = useTheme();
     const isMountedRef = useRefMounted();
+    const { enqueueSnackbar } = useSnackbar();
     const [partyType, setPartyType] = useState('waitlist');
     const [tableType, setTableType] = useState('');
     const [reservationDate, setReservationDate] = useState('');
     const [reservationHour, setReservationHour] = useState('');
     const [tables, setTables] = useState([]);
     const [selectedTable, setSelectedTable] = useState(null);
-    const handleCreatePartySuccess = ()=>{
-    };
 
     const getTables = useCallback(async () => {
       try {
@@ -72,6 +73,19 @@ function Add(){
       getTables();
     }, [getTables]);
     
+
+        
+    const handleCreatePartySuccess = ()=>{
+      enqueueSnackbar('La party fue creada exitosamente', {
+        variant: 'success',
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right'
+        },
+        TransitionComponent: Zoom
+      });
+  
+    };
     
     return (
       <Formik

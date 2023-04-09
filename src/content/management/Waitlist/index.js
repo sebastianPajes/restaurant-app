@@ -14,6 +14,7 @@ import Elements from './Elements';
 function Waitlist() {
   const isMountedRef = useRefMounted();
   const [parties, setParties] = useState([]);
+  const [selectedParty, setSelectedParty] = useState(null);
 
   const getParties = useCallback(async () => {
     try {
@@ -24,9 +25,15 @@ function Waitlist() {
           Authorization : `Bearer ${idToken.jwtToken}`
           }
         });
+      const response2 = await axios.get(`${process.env.REACT_APP_API}api/parties/waitlist`,
+      {
+        headers: {
+          Authorization : `Bearer ${idToken.jwtToken}`
+          }
+        });
 
       if (isMountedRef.current) {
-        setParties(response.data.data.parties);
+        setParties(response.data.data.parties.concat(response2.data.data.parties));
       }
     } catch (err) {
       console.error(err);
@@ -35,7 +42,14 @@ function Waitlist() {
 
   useEffect(() => {
     getParties();
+    setSelectedParty(parties[0]);
   }, [getParties]);
+
+  const handleSelectParty = (selectedParty) => {
+    setSelectedParty(selectedParty);
+  }
+  
+
 
   return (
     <>
@@ -53,11 +67,15 @@ function Waitlist() {
         spacing={4}
       >
         <Grid item md={6} xs={12}>
-          <Elements parties={parties}/>
+          <Elements parties={parties} handleSelectParty={handleSelectParty}/>
         </Grid>
-        <Grid item md={6} xs={12}>
-          <RighSide/>
-        </Grid>
+        {
+          selectedParty && 
+          <Grid item md={6} xs={12}>
+            <RighSide selectedParty={selectedParty}/>
+          </Grid>
+        }
+
       </Grid>
     </>
   );

@@ -44,7 +44,9 @@ const ListItemButtonWrapper = styled(ListItemButton)(
   `
 );
 
-function Elements({parties}) {
+
+
+function Elements({parties, handleSelectParty}) {
   const theme = useTheme();
   const location = useLocation();
 
@@ -103,6 +105,8 @@ function Elements({parties}) {
                 py: 2,
                 px: 2.5
               }}
+              onClick={() => {handleSelectParty(p)}}
+              key={p.sk}
             >
               <ListItemAvatar
                 sx={{
@@ -145,7 +149,7 @@ function Elements({parties}) {
                         }}
                         variant="subtitle2"
                       >
-                        <Text color="success">Note</Text>
+                        <Text color="success">{p.notes}</Text>
                       </Typography>
                     </Box>
                   </>

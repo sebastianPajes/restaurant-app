@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useState, forwardRef} from 'react';
+import axios from 'axios';
+import { Auth } from 'aws-amplify';
+
 import {
   Box,
   CardHeader,
   Card,
+  Slide,
   Typography,
   alpha,
   Tooltip,
@@ -16,7 +20,9 @@ import {
   Grid,
   Badge,
   Button,
+  Dialog,
   styled,
+  Zoom,
   useTheme
 } from '@mui/material';
 import Text from 'src/components/Text';
@@ -24,18 +30,25 @@ import Text from 'src/components/Text';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import { Link as RouterLink } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
-import { useTranslation } from 'react-i18next';
 import PersonTwoToneIcon from '@mui/icons-material/PersonTwoTone';
 import TableRestaurantTwoToneIcon from '@mui/icons-material/TableRestaurantTwoTone';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import DescriptionIcon from '@mui/icons-material/Description';
+import CloseIcon from '@mui/icons-material/Close';
+
+
 
 import Scrollbar from 'src/components/Scrollbar';
 import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
 
-const BoxComposed = styled(Box)(
+const DialogWrapper = styled(Dialog)(
   () => `
-    position: relative;
-  `
+      .MuiDialog-paper {
+        overflow: visible;
+      }
+`
 );
 
 const AvatarSuccess = styled(Avatar)(
@@ -48,46 +61,28 @@ const AvatarSuccess = styled(Avatar)(
   `
 );
 
-const BoxComposedContent = styled(Box)(
+const AvatarError = styled(Avatar)(
   ({ theme }) => `
-    position: relative;
-    z-index: 7;
+      background-color: ${theme.colors.error.lighter};
+      color: ${theme.colors.error.main};
+      width: ${theme.spacing(12)};
+      height: ${theme.spacing(12)};
 
-    .MuiTypography-root {
-        color: ${theme.palette.primary.contrastText};
-
-        & + .MuiTypography-root {
-            color: ${alpha(theme.palette.primary.contrastText, 0.7)};
-        }
-    }
-    
-  `
+      .MuiSvgIcon-root {
+        font-size: ${theme.typography.pxToRem(45)};
+      }
+`
 );
 
-const BoxComposedImage = styled(Box)(
-  () => `
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 5;
-    filter: grayscale(80%);
-    background-size: cover;
-    height: 100%;
-    width: 100%;
-    border-radius: inherit;
-  `
-);
+const ButtonError = styled(Button)(
+  ({ theme }) => `
+     background: ${theme.colors.error.main};
+     color: ${theme.palette.error.contrastText};
 
-const BoxComposedBg = styled(Box)(
-  () => `
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 6;
-    height: 100%;
-    width: 100%;
-    border-radius: inherit;
-  `
+     &:hover {
+        background: ${theme.colors.error.dark};
+     }
+    `
 );
 
 const TabsWrapper = styled(Tabs)(
@@ -99,17 +94,25 @@ const TabsWrapper = styled(Tabs)(
         }
     `
 );
+
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
+
+
 const CardWrapper = styled(Card)(
   ({ theme }) => `
       background: ${alpha(theme.colors.alpha.black[10], 0.10)};
   `
 );
 
-function RighSide() {
-  const { t } = useTranslation();
-  const theme = useTheme();
+function RighSide({selectedParty}) {
+  const { enqueueSnackbar } = useSnackbar();
+
 
   const [currentTab, setCurrentTab] = useState('details');
+  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
   const tabs = [
     { value: 'details', label: 'Detalles' },
@@ -120,7 +123,37 @@ function RighSide() {
     setCurrentTab(value);
   };
 
+  
+  const handleConfirmDelete = () => {
+    setOpenConfirmDelete(true);
+  };
+
+  const closeConfirmDelete = () => {
+    setOpenConfirmDelete(false);
+  };
+
+  const handleDeleteCompleted = async() => {
+    setOpenConfirmDelete(false);
+    const {idToken} = await Auth.currentSession();
+    const response = await axios.delete(`${process.env.REACT_APP_API}api/parties/${selectedParty.sk.split('#')[1].split('-')[0]}/${selectedParty.sk.split('#')[2]}`,
+    {
+      headers: {
+        Authorization : `Bearer ${idToken.jwtToken}`
+        }
+      });
+    enqueueSnackbar("Se ha borrado exitosamente la party", {
+      variant: 'success',
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      },
+      TransitionComponent: Zoom
+    });
+    window.location.reload(false);
+  };
+
   return (
+    <>
     <Card>
       <CardHeader
         sx={{
@@ -129,7 +162,7 @@ function RighSide() {
         disableTypography
         title={
           <>
-            <Typography variant="h4">Party name</Typography>
+            <Typography variant="h4"> {selectedParty.customer.name} </Typography>
           </>
         }
       />
@@ -164,14 +197,16 @@ function RighSide() {
                   p: 0
                 }}
               >
-                numeroTelefono
+                  <PhoneIphoneIcon fontSize="large" />
+                {selectedParty.customer.phone}
               </TimelineItem>
               <TimelineItem
                 sx={{
                   p: 0
                 }}
               >
-                Nota
+                <DescriptionIcon fontSize="large"/>
+                {selectedParty.notes}
               </TimelineItem>
             </Timeline>
           <Grid container spacing={6}>
@@ -191,30 +226,33 @@ function RighSide() {
                     pt: 1
                   }}
                 >
-                  4
+                  {selectedParty.customer.partySize}
                 </Typography>
               </CardWrapper>
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <CardWrapper
-                elevation={0}
-                sx={{
-                  textAlign: 'center',
-                  pt: 3,
-                  pb: 2.5
-                }}
-              >
-                <TableRestaurantTwoToneIcon fontSize="large" />
-                <Typography
-                  variant="h4"
+            {selectedParty.tableCodes?.map((table) => (
+              <Grid item xs={12} sm={4}>
+                <CardWrapper
+                  elevation={0}
                   sx={{
-                    pt: 1
+                    textAlign: 'center',
+                    pt: 3,
+                    pb: 2.5
                   }}
                 >
-                  5
-                </Typography>
-              </CardWrapper>
-            </Grid>
+                  <TableRestaurantTwoToneIcon fontSize="large" />
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      pt: 1
+                    }}
+                  >
+                    {table}
+                  </Typography>
+                </CardWrapper>
+              </Grid>
+              ))}
+           
           </Grid>
           </Scrollbar>
         </Box>
@@ -260,6 +298,11 @@ function RighSide() {
           textAlign: 'center'
         }}
       >
+          <Button variant="contained"
+          onClick={handleConfirmDelete}
+          >
+            Eliminar
+          </Button>
           <Button variant="contained">
             Editar
           </Button>
@@ -271,6 +314,62 @@ function RighSide() {
           </Button>
       </Box>
     </Card>
+          <DialogWrapper
+          open={openConfirmDelete}
+          maxWidth="sm"
+          fullWidth
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={closeConfirmDelete}
+        >
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
+            p={5}
+          >
+            <AvatarError>
+              <CloseIcon />
+            </AvatarError>
+  
+            <Typography
+              align="center"
+              sx={{
+                pt: 4,
+                px: 6
+              }}
+              variant="h3"
+            >
+              Realmente quieres borrar esta party?
+            </Typography>
+  
+            <Box>
+              <Button
+                variant="text"
+                size="large"
+                sx={{
+                  mx: 1
+                }}
+                onClick={closeConfirmDelete}
+              >
+                Cancelar
+              </Button>
+              <ButtonError
+                onClick={handleDeleteCompleted}
+                size="large"
+                sx={{
+                  mx: 1,
+                  px: 3
+                }}
+                variant="contained"
+              >
+                Eliminar
+              </ButtonError>
+            </Box>
+          </Box>
+        </DialogWrapper>
+        </>
   );
 }
 

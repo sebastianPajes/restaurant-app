@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Auth } from 'aws-amplify';
 import axios from 'axios';
+import PhoneNumberInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import {
   Box,
   Card,
@@ -9,13 +11,28 @@ import {
   Typography,
   TextField,
   Button,
+  FormHelperText,
 } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  // Add your custom styles here
+  phoneNumberInput: {
+    width: '100%',
+    maxWidth: '300px',
+    '& .react-phone-number-input__input': {
+      width: '100%',
+    },
+  },
+}));
 
 const LocationDetail = () => {
   const [location, setLocation] = useState(null);
   const [updatedLocation, setUpdatedLocation] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [waitingTimeError, setWaitingTimeError] = useState('');
+  const [error, setError] = useState(null)
+  const classes = useStyles();
 
 
   useEffect(() => {
@@ -27,6 +44,12 @@ const LocationDetail = () => {
             Authorization: `Bearer ${idToken.jwtToken}`,
           },
         });
+
+        console.log(response)
+        if (response.data.message !== 'Success') {
+          setError(response.data.message)
+          return;
+        }
 
         const location = response.data.data.location;
         setLocation(location);
@@ -65,6 +88,10 @@ const LocationDetail = () => {
     }
   };
 
+  const handlePhoneNumberChange = (value) => {
+    setUpdatedLocation({ ...updatedLocation, phone: value });
+  };
+
   const handleEdit = () => {
     setIsEditMode(true);
   };
@@ -72,6 +99,7 @@ const LocationDetail = () => {
   const handleCancel = () => {
     setIsEditMode(false);
     setUpdatedLocation(location);
+    setError(null)
   };
 
   const handleSave = async () => {
@@ -86,14 +114,20 @@ const LocationDetail = () => {
           },
         }
       );
-  
       if (response.status === 200) {
         setLocation(updatedLocation);
         setIsEditMode(false);
+        setError(null)
       } else {
-        console.error('Error updating the location');
+        setError(response.data.message)
+        console.error('Error updating the locationzzz');
       }
     } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError('Error updating the location');
+      }
       console.error('Error updating the location:', error);
     }
   };
@@ -105,6 +139,9 @@ const LocationDetail = () => {
     <Card>
       <CardContent>
         <Grid container spacing={2}>
+          <Grid item xs={12}>
+          {error && <FormHelperText error>{error}</FormHelperText>}
+         </Grid>
           <Grid item xs={12} container justifyContent="space-between">
             <Grid item>
               <Typography variant="h4">
@@ -179,6 +216,23 @@ const LocationDetail = () => {
                   </Typography>
                 )}
               </>
+            )}
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="subtitle1" display="inline">
+              Teléfono:{' '}
+            </Typography>
+            {!isEditMode ? (
+              <Typography variant="body1" display="inline">
+                {location.phone}
+              </Typography>
+            ) : (
+              <PhoneNumberInput
+                defaultCountry="PE"
+                value={updatedLocation.phone}
+                onChange={handlePhoneNumberChange}
+                className={classes.phoneNumberInput}
+              />
             )}
           </Grid>
           <Grid item xs={12}>

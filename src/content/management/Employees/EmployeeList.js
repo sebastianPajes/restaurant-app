@@ -37,7 +37,7 @@ function EmployeeList() {
         const employees = response.data.data.employees.map(employee => ({
             ...employee,
             sk: employee.sk.split('#')[1]
-          }));
+          }));  
         setEmployees(employees);
       } catch (error) {
         console.error(error);
@@ -77,12 +77,14 @@ function EmployeeList() {
   const handleEdit = id => {
     setEditingRows([...editingRows, id]);
     const employee = employees.find(employee => employee.sk === id)
+    console.log(employee)
     setEditData({
         id,
         email: employee.email,
         phone: employee.phone,
         firstName: employee.firstName,
-        lastName: employee.lastName
+        lastName: employee.lastName,
+        isAdmin: employee.isAdmin
     });
   };
 

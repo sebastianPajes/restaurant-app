@@ -72,12 +72,18 @@ const LocationDetail = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Object.entries(location.businessHours).map(([day, hours]) => (
-                    <TableRow key={day}>
-                      <TableCell>{day}</TableCell>
-                      <TableCell>{hours}</TableCell>
-                    </TableRow>
-                  ))}
+                  {Object.entries(location.businessHours)
+                    .sort((a, b) => {
+                      const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                      return daysOfWeek.indexOf(a[0]) - daysOfWeek.indexOf(b[0]);
+                    })
+                    .map(([day, hours]) => (
+                      <TableRow key={day}>
+                        <TableCell>{day}</TableCell>
+                        <TableCell>{hours}</TableCell>
+                      </TableRow>
+                    ))
+                  }
                 </TableBody>
               </Table>
             </TableContainer>

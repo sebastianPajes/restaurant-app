@@ -5,8 +5,6 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Auth } from 'aws-amplify';
 
 const menuItems = [
   {
@@ -37,11 +35,6 @@ const menuItems = [
         link: 'categorias',
       },
       {
-        name: 'Empleados',
-        icon: PeopleOutlineOutlinedIcon,
-        link: 'employees',
-      },
-      {
         name: 'Historial',
         icon: HistoryOutlinedIcon,
         link: 'historial',
@@ -50,11 +43,6 @@ const menuItems = [
         name: 'Reportes',
         icon: AssessmentOutlinedIcon,
         link: 'reportes',
-      },
-      {
-        name: 'Cerrar sesión',
-        icon: ExitToAppIcon,
-        onClick: () => Auth.signOut(),
       },
     ],
   },

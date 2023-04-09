@@ -1,7 +1,7 @@
 import BackupTableTwoToneIcon from '@mui/icons-material/BackupTableTwoTone';
 import PeopleOutlineTwoToneIcon from '@mui/icons-material/PeopleOutlineTwoTone';
 import TableRestaurantTwoToneIcon from '@mui/icons-material/TableRestaurantTwoTone';
-import QrCodeTwoToneIcon from '@mui/icons-material/QrCodeTwoTone';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 const menuItems = [
   {
     items: [
@@ -21,9 +21,9 @@ const menuItems = [
         link: 'mesas',
       },
       {
-        name: 'QRs',
-        icon: QrCodeTwoToneIcon,
-        link: 'qrs',
+        name: 'Back',
+        icon: ArrowBackIcon,
+        link: 'waitlist',
       }
     ]
   }

@@ -62,15 +62,6 @@ const router = [
           }
         ]
       },
-      {
-        path: 'employees',
-        children: [
-          {
-            path: '',
-            element: <EmployeeList/>
-          }
-        ]
-      }
     ]
   },
   {
@@ -86,8 +77,12 @@ const router = [
         element: <Navigate to="empleados" replace />
       },
       {
+        path: 'waitlist',
+        element: <Navigate to="/waitlist" replace />
+      },
+      {
         path: 'empleados',
-        element: <Users />
+        element: <EmployeeList />
       }
     ]
   }

@@ -14,6 +14,7 @@ import Waitlist from 'src/content/management/Waitlist';
 import Add from 'src/content/management/Waitlist/Add';
 import EmployeeList from 'src/content/management/Employees/EmployeeList';
 import LocationDetail from 'src/content/management/Location/LocationDetail';
+import TableList from 'src/content/management/Tables/TableList';
 
 const Loader = (Component) => (props) =>
   (
@@ -91,7 +92,7 @@ const router = [
       },
       {
         path: 'mesas',
-        element: <p>Mesas...</p>
+        element: <TableList />
       }
     ]
   }

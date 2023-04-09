@@ -137,6 +137,8 @@ function EmployeeList() {
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
 
+  if (!employees || employees.length === 0) return <div>Cargando...</div>;
+
   return (
     <TableContainer>
       <Table>

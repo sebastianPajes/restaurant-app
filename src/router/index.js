@@ -13,6 +13,7 @@ import SuspenseLoader from 'src/components/SuspenseLoader';
 import Waitlist from 'src/content/management/Waitlist';
 import Add from 'src/content/management/Waitlist/Add';
 import EmployeeList from 'src/content/management/Employees/EmployeeList';
+import LocationDetail from 'src/content/management/Location/LocationDetail';
 
 const Loader = (Component) => (props) =>
   (
@@ -83,6 +84,14 @@ const router = [
       {
         path: 'empleados',
         element: <EmployeeList />
+      },
+      {
+        path: 'informacion-general',
+        element: <LocationDetail />
+      },
+      {
+        path: 'mesas',
+        element: <p>Mesas...</p>
       }
     ]
   }

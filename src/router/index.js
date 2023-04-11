@@ -12,6 +12,7 @@ import { Suspense, lazy } from 'react';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import Waitlist from 'src/content/management/Waitlist';
 import Add from 'src/content/management/Waitlist/Add';
+import Edit from 'src/content/management/Waitlist/Edit';
 import EmployeeList from 'src/content/management/Employees/EmployeeList';
 import LocationDetail from 'src/content/management/Location/LocationDetail';
 import TableList from 'src/content/management/Tables/TableList';
@@ -61,6 +62,10 @@ const router = [
           {
             path:'registro',
             element:<Add/>
+          },
+          {
+            path:'actualizacion',
+            element:<Edit/>
           }
         ]
       },

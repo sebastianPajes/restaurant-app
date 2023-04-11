@@ -1,4 +1,4 @@
-import { useState, forwardRef} from 'react';
+import { useState, forwardRef, useEffect, useCallback} from 'react';
 import axios from 'axios';
 import { Auth } from 'aws-amplify';
 
@@ -25,12 +25,12 @@ import {
   Zoom,
   useTheme
 } from '@mui/material';
-import Text from 'src/components/Text';
 
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import useRefMounted from 'src/hooks/useRefMounted';
 
 import PersonTwoToneIcon from '@mui/icons-material/PersonTwoTone';
 import TableRestaurantTwoToneIcon from '@mui/icons-material/TableRestaurantTwoTone';
@@ -107,12 +107,38 @@ const CardWrapper = styled(Card)(
   `
 );
 
-function RighSide({selectedParty}) {
+function RightSide({selectedParty}) {
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const isMountedRef = useRefMounted();
 
 
   const [currentTab, setCurrentTab] = useState('details');
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
+  const [tables, setTables] = useState([]);
+
+
+  const getTables = useCallback(async () => {
+    try {
+      const {idToken} = await Auth.currentSession();
+      const response = await axios.get(`${process.env.REACT_APP_API}api/tables`,
+      {
+        headers: {
+          Authorization : `Bearer ${idToken.jwtToken}`
+          }
+      });
+      if (isMountedRef.current) {
+        setTables(response.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMountedRef]);;
+
+  
+  useEffect(() => {
+    getTables();
+  }, [getTables]);
 
   const tabs = [
     { value: 'details', label: 'Detalles' },
@@ -123,7 +149,14 @@ function RighSide({selectedParty}) {
     setCurrentTab(value);
   };
 
-  
+  const handleEdit = () =>{
+    navigate(`/waitlist/actualizacion`, { state: {selectedParty}});
+  }
+
+  const handleSit = () =>{
+    //TODO: ask what implies this more than removing from the UI and setting its seated flag to true
+  }
+
   const handleConfirmDelete = () => {
     setOpenConfirmDelete(true);
   };
@@ -152,20 +185,56 @@ function RighSide({selectedParty}) {
     window.location.reload(false);
   };
 
+  const actualDate = new Date(selectedParty.dateTime);
   return (
     <>
     <Card>
-      <CardHeader
-        sx={{
-          p: 3
-        }}
-        disableTypography
-        title={
-          <>
-            <Typography variant="h4"> {selectedParty.customer.name} </Typography>
-          </>
-        }
-      />
+      <Grid container spacing={0}>
+              <Grid item xs={6} sm={2}>
+                  <CardWrapper
+                        elevation={0}
+                              sx={{
+                                textAlign: 'center',
+                                pt: 3,
+                                pb: 2.5,
+                              }}
+                            >
+                              <Typography
+                                variant="h4"
+                                sx={{
+                                  pt: 1
+                                }}
+                              >
+                                {selectedParty.waitingTime || actualDate.getDate()+ '/' + parseInt(actualDate.getMonth()+1) + '/' + actualDate.getFullYear()}
+                              </Typography>
+                              { selectedParty.dateTime && 
+
+                                                <Typography
+                                                      variant="h6"
+                                                      sx={{
+                                                        pt: 1
+                                                      }}
+                                                      >
+                                                  { actualDate.getHours()+ ':' + actualDate.getMinutes()}
+                                        </Typography>
+                              }
+                     
+                    </CardWrapper>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <CardHeader
+                    sx={{
+                      p: 3
+                    }}
+                    disableTypography
+                    title={
+                      <>
+                        <Typography variant="h4"> {selectedParty.customer.name} </Typography>
+                      </>
+                    }
+                  />
+                </Grid>
+          </Grid>
       <Box p={2}>
         <TabsWrapper
           centered
@@ -230,7 +299,7 @@ function RighSide({selectedParty}) {
                 </Typography>
               </CardWrapper>
             </Grid>
-            {selectedParty.tableCodes?.map((table) => (
+            {selectedParty.tableCodes?.map((tableCode) => (
               <Grid item xs={12} sm={4}>
                 <CardWrapper
                   elevation={0}
@@ -247,7 +316,7 @@ function RighSide({selectedParty}) {
                       pt: 1
                     }}
                   >
-                    {table}
+                    {tables.find( t=> t.sk.split('#')[1] === tableCode)?.size}
                   </Typography>
                 </CardWrapper>
               </Grid>
@@ -303,13 +372,15 @@ function RighSide({selectedParty}) {
           >
             Eliminar
           </Button>
-          <Button variant="contained">
+          <Button variant="contained"
+            onClick={handleEdit}
+          >
             Editar
           </Button>
           <Button variant="contained" >
             Mesa
           </Button>
-          <Button variant="contained" >
+          <Button variant="contained" onClick={handleSit()}>
             Sentar
           </Button>
       </Box>
@@ -373,4 +444,4 @@ function RighSide({selectedParty}) {
   );
 }
 
-export default RighSide;
+export default RightSide;

@@ -8,7 +8,7 @@ import { Grid } from '@mui/material';
 import useRefMounted from 'src/hooks/useRefMounted';
 
 
-import RighSide from './RightSide';
+import RightSide from './RightSide';
 import Elements from './Elements';
 
 function Waitlist() {
@@ -72,7 +72,7 @@ function Waitlist() {
         {
           selectedParty && 
           <Grid item md={6} xs={12}>
-            <RighSide selectedParty={selectedParty}/>
+            <RightSide selectedParty={selectedParty}/>
           </Grid>
         }
 

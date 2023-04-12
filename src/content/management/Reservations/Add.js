@@ -37,21 +37,16 @@ import { TimePicker } from '@mui/x-date-pickers';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import useRefMounted from 'src/hooks/useRefMounted';
-import { useLocation, useNavigate} from 'react-router-dom';
 
-function Edit(){
+
+function Add(){
     const theme = useTheme();
-    const location = useLocation();
-    const navigate = useNavigate();
-    const selectedParty = location.state.selectedParty;
-    console.log(selectedParty);
-    // console.log(new Date(selectedParty.dateTime))
     const isMountedRef = useRefMounted();
     const { enqueueSnackbar } = useSnackbar();
-    const [partyType, setPartyType] = useState('waitlist');
+    const [partyType, setPartyType] = useState('booking');
     const [tableType, setTableType] = useState('');
-    const [reservationDate, setReservationDate] = useState(new Date(selectedParty.dateTime?.split('T')[0]));
-    const [reservationHour, setReservationHour] = useState(new Date(selectedParty.dateTime));
+    const [reservationDate, setReservationDate] = useState('');
+    const [reservationHour, setReservationHour] = useState('');
     const [tables, setTables] = useState([]);
     const [selectedTable, setSelectedTable] = useState(null);
 
@@ -64,10 +59,8 @@ function Edit(){
             Authorization : `Bearer ${idToken.jwtToken}`
             }
         });
+       console.log(response.data)
         if (isMountedRef.current) {
-          const foundTable = response.data.find( t=> t.sk.split('#')[1] === selectedParty.tableCodes[0]);
-          console.log(foundTable);
-          setSelectedTable(foundTable);
           setTables(response.data);
         }
       } catch (err) {
@@ -83,7 +76,7 @@ function Edit(){
 
         
     const handleCreatePartySuccess = ()=>{
-      enqueueSnackbar('La party fue actualizada exitosamente', {
+      enqueueSnackbar('La party fue creada exitosamente', {
         variant: 'success',
         anchorOrigin: {
           vertical: 'top',
@@ -91,22 +84,23 @@ function Edit(){
         },
         TransitionComponent: Zoom
       });
+  
     };
     
     return (
       <Formik
       initialValues={{
-        name: selectedParty.customer.name,
-        phone: selectedParty.customer.phone,
-        partySize:selectedParty.customer.partySize,
-        tableCodes: selectedParty.tableCodes,
+        name: '',
+        phone: '',
+        partySize:0,
+        tableCodes:[],
         // tags:[],
-        notes: selectedParty.notes,
-        duration: selectedParty.duration,
-        date: selectedParty.duration,
-        time:  selectedParty.duration,
-        waitingTime: selectedParty.waitingTime,
-        dateTime: selectedParty.dateTime,
+        notes:'',
+        duration:0,
+        date:'',
+        time:'',
+        waitingTime:'',
+        dateTime:'',
         submit: null
       }}
       onSubmit={async (
@@ -115,29 +109,28 @@ function Edit(){
         ) => {
           try {
             const {idToken} = await Auth.currentSession();
-            let existingProduct = {
-              id: selectedParty.sk.split('#')[2],
+            let newProduct = {
               source:"manual",
               customer:{
                 name: _values.name,
                 phone: _values.phone,
                 partySize: parseInt(_values.partySize),
               } ,
-              tableCodes: [selectedTable?.sk.split('#')[1]],
+              tableCodes: [selectedTable.sk.split('#')[1]],
               tags: [tableType],//TODO: make sure
               notes: _values.notes,
             };
             if(partyType === "booking"){  //only for booking
-              existingProduct.duration = parseInt(_values.duration);
+              newProduct.duration = parseInt(_values.duration);
               const reservationDateTime = new Date(reservationDate.toISOString().split('T')[0] + 'T' + reservationHour.toISOString().split('T')[1]);
               // console.log(test);
               // console.log(test.toISOString());
-              existingProduct.dateTime = reservationDateTime ;
+              newProduct.dateTime = reservationDateTime;
             }else{//only for waitlist
-              existingProduct.waitingTime =  _values.waitingTime; 
+              newProduct.waitingTime = _values.waitingTime; 
           }
           const response = await axios.post(`${process.env.REACT_APP_API}api/parties/${partyType}`,
-          existingProduct,
+          newProduct,
           {
             headers: {
               Authorization : `Bearer ${idToken.jwtToken}`
@@ -147,7 +140,7 @@ function Edit(){
           resetForm();
           setStatus({ success: true });
           setSubmitting(false);
-          handleCreatePartySuccess();
+          handleCreatePartySuccess(newProduct);
         } catch (err) {
           console.error(err);
           setStatus({ success: false });
@@ -427,9 +420,8 @@ function Edit(){
                     m: 0
                   }}
                   limitTags={2}
-                  getOptionLabel={(option) => `Mesa ${option.sk.split('#')[1]} para ${option.size} personas`}
+                  getOptionLabel={(option) => "Para "+ option.size+ " personas"}
                   options={tables}
-                  value={selectedTable}
                   onChange={(event,newValue)=> setSelectedTable(newValue)}
                   renderInput={(params) => (
                     <TextField
@@ -470,9 +462,8 @@ function Edit(){
               p: 3
             }}
           >
-            <Button color="secondary"
-              onClick={()=> navigate(-1)}
-              >
+            <Button color="secondary">
+            {/*onClick={handleCreateUserClose}>*/}
               Cancelar
             </Button>
             <Button
@@ -483,7 +474,7 @@ function Edit(){
               disabled={Boolean(errors.submit) || isSubmitting}
               variant="contained"
             >
-              Actualizar
+              Agregar
             </Button>
           </DialogActions>
         </form>
@@ -491,4 +482,4 @@ function Edit(){
     </Formik>);
 }
 
-export default Edit;
+export default Add;

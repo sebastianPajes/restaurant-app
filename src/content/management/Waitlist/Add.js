@@ -125,9 +125,9 @@ function Add(){
               const reservationDateTime = new Date(reservationDate.toISOString().split('T')[0] + 'T' + reservationHour.toISOString().split('T')[1]);
               // console.log(test);
               // console.log(test.toISOString());
-              newProduct.dateTime = reservationDateTime ;
+              newProduct.dateTime = reservationDateTime;
             }else{//only for waitlist
-            newProduct.waitingTime =  _values.waitingTime; 
+              newProduct.waitingTime = _values.waitingTime; 
           }
           const response = await axios.post(`${process.env.REACT_APP_API}api/parties/${partyType}`,
           newProduct,

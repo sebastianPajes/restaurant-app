@@ -11,6 +11,9 @@ import { Suspense, lazy } from 'react';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import Waitlist from 'src/content/management/Waitlist';
+import Reservations from 'src/content/management/Reservations';
+import AddReservation from 'src/content/management/Reservations/Add';
+import EditReservation from 'src/content/management/Reservations/Edit';
 import Add from 'src/content/management/Waitlist/Add';
 import Edit from 'src/content/management/Waitlist/Edit';
 import EmployeeList from 'src/content/management/Employees/EmployeeList';
@@ -66,6 +69,23 @@ const router = [
           {
             path:'actualizacion',
             element:<Edit/>
+          }
+        ]
+      },
+      {
+        path:'reservas',
+        children:[
+          {
+            path:'',
+            element:<Reservations/>,
+          },
+          {
+            path:'registro',
+            element:<AddReservation/>
+          },
+          {
+            path:'actualizacion',
+            element:<EditReservation/>
           }
         ]
       },

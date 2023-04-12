@@ -37,7 +37,7 @@ import { TimePicker } from '@mui/x-date-pickers';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import useRefMounted from 'src/hooks/useRefMounted';
-import { useLocation, useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate  } from 'react-router-dom';
 
 function Edit(){
     const theme = useTheme();
@@ -48,7 +48,7 @@ function Edit(){
     // console.log(new Date(selectedParty.dateTime))
     const isMountedRef = useRefMounted();
     const { enqueueSnackbar } = useSnackbar();
-    const [partyType, setPartyType] = useState('waitlist');
+    const [partyType, setPartyType] = useState('booking');
     const [tableType, setTableType] = useState('');
     const [reservationDate, setReservationDate] = useState(new Date(selectedParty.dateTime?.split('T')[0]));
     const [reservationHour, setReservationHour] = useState(new Date(selectedParty.dateTime));
@@ -91,6 +91,7 @@ function Edit(){
         },
         TransitionComponent: Zoom
       });
+      navigate(-1);
     };
     
     return (
@@ -471,8 +472,8 @@ function Edit(){
             }}
           >
             <Button color="secondary"
-              onClick={()=> navigate(-1)}
-              >
+            onClick={()=> navigate(-1)}
+            >
               Cancelar
             </Button>
             <Button

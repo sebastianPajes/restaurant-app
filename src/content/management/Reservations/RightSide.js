@@ -9,16 +9,13 @@ import {
   Slide,
   Typography,
   alpha,
-  Tooltip,
-  CardActionArea,
-  CardMedia,
-  ButtonGroup,
+  TextField,
   Avatar,
   AvatarGroup,
   Tab,
   Tabs,
   Grid,
-  Badge,
+  Autocomplete,
   Button,
   Dialog,
   styled,
@@ -31,6 +28,8 @@ import TimelineItem from '@mui/lab/TimelineItem';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import useRefMounted from 'src/hooks/useRefMounted';
+import InputAdornment from '@mui/material/InputAdornment';
+
 
 import PersonTwoToneIcon from '@mui/icons-material/PersonTwoTone';
 import TableRestaurantTwoToneIcon from '@mui/icons-material/TableRestaurantTwoTone';
@@ -116,7 +115,10 @@ function RightSide({selectedParty}) {
   const [currentTab, setCurrentTab] = useState('details');
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [openConfirmSit, setOpenConfirmSit] = useState(false);
-  const [tables, setTables] = useState([]);
+  const [selectedTable, setSelectedTable] = useState(false);
+  const [openConfirmEditTable, setOpenConfirmEditTable] = useState(false);
+  const [tables, setTables] = useState(null);
+ 
 
 
   const getTables = useCallback(async () => {
@@ -153,7 +155,18 @@ function RightSide({selectedParty}) {
   const handleEdit = () =>{
     navigate(`actualizacion`, { state: {selectedParty}});
   }
-
+  const handleEditTable = async() =>{
+    const {idToken} = await Auth.currentSession();
+    
+    const response = await axios.post(`${process.env.REACT_APP_API}api/parties/booking`,
+      {...selectedParty, id: selectedParty.sk.split('#')[2], tableCodes:[selectedTable?.sk?.split('#')[1]]},
+    {
+      headers: {
+        Authorization : `Bearer ${idToken.jwtToken}`
+        }
+    });
+    window.location.reload(false);
+  }
   const handleSit = async() =>{
     const {idToken} = await Auth.currentSession();
     
@@ -167,6 +180,14 @@ function RightSide({selectedParty}) {
     window.location.reload(false);//backend should list just not seated
   }
 
+
+  const handleConfirmEditTable= () => {
+    setOpenConfirmEditTable(true);
+  };
+
+  const closeConfirmEditTable = () => {
+    setOpenConfirmEditTable(false);
+  };
   const handleConfirmSit = () => {
     setOpenConfirmSit(true);
   };
@@ -334,7 +355,7 @@ function RightSide({selectedParty}) {
                       pt: 1
                     }}
                   >
-                    {tables.find( t=> t.sk.split('#')[1] === tableCode)?.size}
+                    {tables?.find(t=> t.sk.split('#')[1] === tableCode)?.size}
                   </Typography>
                 </CardWrapper>
               </Grid>
@@ -395,7 +416,7 @@ function RightSide({selectedParty}) {
           >
             Editar
           </Button>
-          <Button variant="contained" >
+          <Button variant="contained"  onClick={handleConfirmEditTable}>
             Mesa
           </Button>
           <Button variant="contained" onClick={handleConfirmSit}>
@@ -506,6 +527,72 @@ function RightSide({selectedParty}) {
                 variant="contained"
               >
                 Sentar
+              </ButtonError>
+            </Box>
+          </Box>
+        </DialogWrapper>
+
+        <DialogWrapper
+          open={openConfirmEditTable}
+          maxWidth="sm"
+          fullWidth
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={closeConfirmEditTable}
+        >
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
+            p={5}
+          >  
+                  <Autocomplete
+                  sx={{
+                    m: 0
+                  }}
+                  fullWidth
+                  limitTags={2}
+                  getOptionLabel={(option) => `Mesa ${option.sk.split('#')[1]} para ${option.size} personas`}
+                  options={tables}
+                  onChange={(event,newValue)=> setSelectedTable(newValue)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      placeholder="Selecciona la mesa a utilizar"
+                      InputProps={{
+                        ...params.InputProps,
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <TableRestaurantTwoToneIcon />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  )}
+                />
+            <Box>
+              <Button
+                variant="text"
+                size="large"
+                sx={{
+                  mx: 1
+                }}
+                onClick={closeConfirmEditTable}
+              >
+                Cancelar
+              </Button>
+              <ButtonError
+                onClick={handleEditTable}
+                size="large"
+                sx={{
+                  mx: 1,
+                  px: 3
+                }}
+                variant="contained"
+              >
+                Guardar
               </ButtonError>
             </Box>
           </Box>

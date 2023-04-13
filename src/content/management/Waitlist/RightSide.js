@@ -165,6 +165,7 @@ function RightSide({selectedParty}) {
         Authorization : `Bearer ${idToken.jwtToken}`
         }
     });
+    window.location.reload(false);
   }
   const handleSit = async() =>{
     const {idToken} = await Auth.currentSession();

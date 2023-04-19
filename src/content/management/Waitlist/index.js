@@ -33,7 +33,8 @@ function Waitlist() {
       //   });
       
       if (isMountedRef.current) {
-        setParties(response.data.data.parties);// not for now ... concat(response2.data.data.parties));
+        const filteredParties = response.data.data.parties.filter((party) => party.seated !== true);
+        setParties(filteredParties); // not for now ... concat(response2.data.data.parties));
       }
     } catch (err) {
       console.error(err);

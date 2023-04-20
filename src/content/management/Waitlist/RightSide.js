@@ -36,7 +36,8 @@ import TableRestaurantTwoToneIcon from '@mui/icons-material/TableRestaurantTwoTo
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CloseIcon from '@mui/icons-material/Close';
-
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 
 import Scrollbar from 'src/components/Scrollbar';
@@ -113,9 +114,12 @@ function RightSide({selectedParty}) {
 
 
   const [currentTab, setCurrentTab] = useState('details');
+  const [waitingTime, setWaitingTime] = useState('');
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
+  const [openConfirmReject, setOpenConfirmReject] = useState(false);
   const [openConfirmSit, setOpenConfirmSit] = useState(false);
   const [openConfirmEditTable, setOpenConfirmEditTable] = useState(false);
+  const [openConfirmEstimate, setOpenConfirmEstimate] = useState(false);
   const [selectedTable, setSelectedTable] = useState(false);
   const [tables, setTables] = useState(null);
 
@@ -154,6 +158,9 @@ function RightSide({selectedParty}) {
   const handleEdit = () =>{
     navigate(`/waitlist/actualizacion`, { state: {selectedParty}});
   }
+  const handleWaitingTimeChange = (e, value) =>{
+    setWaitingTime(value);
+  }
 
   const handleEditTable = async() =>{
     const {idToken} = await Auth.currentSession();
@@ -180,29 +187,7 @@ function RightSide({selectedParty}) {
     window.location.reload(false);//backend should list just not seated
   }
 
-  const handleConfirmEditTable= () => {
-    setOpenConfirmEditTable(true);
-  };
-
-  const closeConfirmEditTable = () => {
-    setOpenConfirmEditTable(false);
-  };
-  const handleConfirmSit = () => {
-    setOpenConfirmSit(true);
-  };
-
-  const closeConfirmSit = () => {
-    setOpenConfirmSit(false);
-  };
-  const handleConfirmDelete = () => {
-    setOpenConfirmDelete(true);
-  };
-
-  const closeConfirmDelete = () => {
-    setOpenConfirmDelete(false);
-  };
-
-  const handleDeleteCompleted = async() => {
+  const handleDeleteCompleted = async () => {
     setOpenConfirmDelete(false);
     const {idToken} = await Auth.currentSession();
     const response = await axios.delete(`${process.env.REACT_APP_API}api/parties/${selectedParty.sk.split('#')[1].split('-')[0]}/${selectedParty.sk.split('#')[2]}`,
@@ -221,6 +206,87 @@ function RightSide({selectedParty}) {
     });
     window.location.reload(false);
   };
+
+  const handleRejectCompleted = async () => {
+    setOpenConfirmReject(false);
+    const {idToken} = await Auth.currentSession();
+    const response = await axios.delete(`${process.env.REACT_APP_API}api/parties/${selectedParty.sk.split('#')[1].split('-')[0]}/${selectedParty.sk.split('#')[2]}`,
+    {
+      headers: {
+        Authorization : `Bearer ${idToken.jwtToken}`
+        }
+      });
+    enqueueSnackbar("Se ha rechazado exitosamente la party", {
+      variant: 'success',
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      },
+      TransitionComponent: Zoom
+    });
+    window.location.reload(false);
+  };
+
+  const handleEstimate =  async () => {
+      const {idToken} = await Auth.currentSession();
+      console.log(waitingTime);
+      const response = await axios.post(`${process.env.REACT_APP_API}api/parties/${selectedParty.sk.split('#')[1].split('-')[0]}`,
+      {...selectedParty, id: selectedParty.sk.split('#')[2], waitingTime}
+      ,
+      {
+        headers: {
+          Authorization : `Bearer ${idToken.jwtToken}`
+        }
+      });
+      enqueueSnackbar("Se ha estimado exitosamente el tiempo para la party", {
+        variant: 'success',
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right'
+        },
+        TransitionComponent: Zoom
+      });
+      window.location.reload(false);
+  };
+
+  const handleConfirmEditTable= () => {
+    setOpenConfirmEditTable(true);
+  };
+
+  const closeConfirmEditTable = () => {
+    setOpenConfirmEditTable(false);
+  };
+  const handleConfirmEstimate= () => {
+    setOpenConfirmEstimate(true);
+  };
+
+  const closeConfirmEstimate = () => {
+    setOpenConfirmEstimate(false);
+  };
+  const handleConfirmSit = () => {
+    setOpenConfirmSit(true);
+  };
+
+  const closeConfirmSit = () => {
+    setOpenConfirmSit(false);
+  };
+  const handleConfirmDelete = () => {
+    setOpenConfirmDelete(true);
+  };
+
+  const closeConfirmDelete = () => {
+    setOpenConfirmDelete(false);
+  };
+
+  const handleConfirmReject = () => {
+    setOpenConfirmReject(true);
+  };
+
+  const closeConfirmReject = () => {
+    setOpenConfirmReject(false);
+  };
+
+
 
   const actualDate = new Date(selectedParty.dateTime);
   return (
@@ -300,7 +366,7 @@ function RightSide({selectedParty}) {
             >
               <TimelineItem
                 sx={{
-                  p: 0
+                  p: 1
                 }}
               >
                   <PhoneIphoneIcon fontSize="large" />
@@ -308,11 +374,16 @@ function RightSide({selectedParty}) {
               </TimelineItem>
               <TimelineItem
                 sx={{
-                  p: 0
+                  p: 1
                 }}
               >
-                <DescriptionIcon fontSize="large"/>
-                {selectedParty.notes}
+                { !selectedParty.customer.accepted? (<><QrCodeScannerIcon  fontSize="large"/> Código QR</>)
+                :
+                  (<>
+                  <DescriptionIcon fontSize="large"/>
+                 {selectedParty.notes}
+                 </>)
+              }
               </TimelineItem>
             </Timeline>
           <Grid container spacing={6}>
@@ -399,30 +470,47 @@ function RightSide({selectedParty}) {
         </>
       )}
       <Box
-        p={3}
+        p={2}
         sx={{
           textAlign: 'center'
         }}
       >
-          <Button variant="contained"
-          onClick={handleConfirmDelete}
-          >
-            Eliminar
-          </Button>
-          <Button variant="contained"
-            onClick={handleEdit}
-          >
-            Editar
-          </Button>
-          <Button variant="contained" onClick={handleConfirmEditTable}>
-            Mesa
-          </Button>
+         {!selectedParty.customer.accepted?<Button variant="contained" onClick={handleConfirmReject}> Rechazar </Button> //TODO: ask if its same effect as deleting...
+              :
+              <>
+              <Button variant="contained"
+              onClick={handleConfirmDelete}
+              >
+                Eliminar
+              </Button>
+              <Button variant="contained"
+                onClick={handleEdit}
+              >
+                Editar
+              </Button>
+              <Button variant="contained" onClick={handleConfirmEditTable}>
+                Mesa
+              </Button>
+              </>
+            }
           <Button variant="contained" onClick={handleConfirmSit}>
             Sentar
           </Button>
+          {!selectedParty.customer.accepted &&
+            <Box
+              p={0.5}
+              sx={{
+                textAlign: 'center'
+              }}
+            >
+              <Button variant="contained" onClick={handleConfirmEstimate}>
+                      Estimate waiting time
+              </Button>
+            </Box>
+          }
       </Box>
     </Card>
-          <DialogWrapper
+        <DialogWrapper
           open={openConfirmDelete}
           maxWidth="sm"
           fullWidth
@@ -449,7 +537,7 @@ function RightSide({selectedParty}) {
               }}
               variant="h3"
             >
-              Realmente quieres borrar esta party?
+              ¿Realmente quieres borrar esta party?
             </Typography>
   
             <Box>
@@ -477,7 +565,62 @@ function RightSide({selectedParty}) {
             </Box>
           </Box>
         </DialogWrapper>
-          <DialogWrapper
+        <DialogWrapper
+          open={openConfirmReject}
+          maxWidth="sm"
+          fullWidth
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={closeConfirmReject}
+        >
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
+            p={5}
+          >
+            <AvatarError>
+              <CloseIcon />
+            </AvatarError>
+  
+            <Typography
+              align="center"
+              sx={{
+                pt: 4,
+                px: 6
+              }}
+              variant="h3"
+            >
+              ¿Realmente quieres rechazar esta party?
+            </Typography>
+  
+            <Box>
+              <Button
+                variant="text"
+                size="large"
+                sx={{
+                  mx: 1
+                }}
+                onClick={closeConfirmReject}
+              >
+                Cancelar
+              </Button>
+              <ButtonError
+                onClick={handleRejectCompleted}
+                size="large"
+                sx={{
+                  mx: 1,
+                  px: 3
+                }}
+                variant="contained"
+              >
+                Rechazar
+              </ButtonError>
+            </Box>
+          </Box>
+        </DialogWrapper>
+        <DialogWrapper
           open={openConfirmSit}
           maxWidth="sm"
           fullWidth
@@ -514,7 +657,7 @@ function RightSide({selectedParty}) {
               >
                 Cancelar
               </Button>
-              <ButtonError
+              <Button
                 onClick={handleSit}
                 size="large"
                 sx={{
@@ -524,11 +667,11 @@ function RightSide({selectedParty}) {
                 variant="contained"
               >
                 Sentar
-              </ButtonError>
+              </Button>
             </Box>
           </Box>
         </DialogWrapper>
-          <DialogWrapper
+        <DialogWrapper
           open={openConfirmEditTable}
           maxWidth="sm"
           fullWidth
@@ -593,7 +736,61 @@ function RightSide({selectedParty}) {
             </Box>
           </Box>
         </DialogWrapper>
-        </>
+        <DialogWrapper
+          open={openConfirmEstimate}
+          maxWidth="sm"
+          fullWidth
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={closeConfirmEstimate}
+        >
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
+            p={5}
+          >  
+                      <TextField
+                                  InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          <AccessTimeIcon />
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                  label="Rango de tiempo aproximado de espera"
+                                  name="waitingTime"
+                                  value={waitingTime}
+                                  onChange={(e) => setWaitingTime(e.target.value)}
+                                  variant="outlined"
+                        />
+            <Box>
+              <Button
+                variant="text"
+                size="large"
+                sx={{
+                  mx: 1
+                }}
+                onClick={closeConfirmEstimate}
+              >
+                Cancelar
+              </Button>
+              <Button
+                onClick={handleEstimate}
+                size="large"
+                sx={{
+                  mx: 1,
+                  px: 3
+                }}
+                variant="contained"
+              >
+                Guardar
+              </Button>
+            </Box>
+          </Box>
+        </DialogWrapper>
+      </>
   );
 }
 

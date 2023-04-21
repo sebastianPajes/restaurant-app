@@ -20,6 +20,7 @@ import {
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import Text from 'src/components/Text';
 import { Link as RouterLink, useLocation} from 'react-router-dom';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 
 const ListItemButtonWrapper = styled(ListItemButton)(
@@ -44,7 +45,11 @@ const ListItemButtonWrapper = styled(ListItemButton)(
   `
 );
 
-
+const CardWrapper = styled(Card)(
+  ({ theme }) => `
+      background: ${alpha(theme.colors.alpha.black[10], 0.10)};
+  `
+);
 
 function Elements({parties, handleSelectParty}) {
   const theme = useTheme();
@@ -129,6 +134,30 @@ function Elements({parties, handleSelectParty}) {
                     {p.customer.partySize}
                   </Avatar>
               </ListItemAvatar>
+              <CardWrapper
+                        elevation={0}
+                              sx={{
+                                textAlign: 'center',
+                                pt: 3,
+                                pb: 2.5,
+                                background: p.customer.accepted? alpha(theme.colors.alpha.black[10], 0.10): '#FF6C00'
+                              }}
+              >
+                    {
+                      p.customer.accepted?
+                            (<Typography
+                              variant="h6"
+                              sx={{
+                                p: 1
+                              }}
+                            >
+                              {p.waitingTime}
+                            </Typography>)
+                      :                
+                      <AccessTimeIcon/>
+
+                    }
+              </CardWrapper>
               <ListItemText
                 disableTypography
                 primary={

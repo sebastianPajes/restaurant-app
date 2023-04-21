@@ -24,6 +24,8 @@ import {
   useTheme
 } from '@mui/material';
 
+import { createTheme } from '@mui/material/styles';
+
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -101,6 +103,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 
+
 const CardWrapper = styled(Card)(
   ({ theme }) => `
       background: ${alpha(theme.colors.alpha.black[10], 0.10)};
@@ -111,6 +114,10 @@ function RightSide({selectedParty}) {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const isMountedRef = useRefMounted();
+  const theme = useTheme();
+  const theme2 = createTheme();
+
+
 
 
   const [currentTab, setCurrentTab] = useState('details');
@@ -123,7 +130,7 @@ function RightSide({selectedParty}) {
   const [selectedTable, setSelectedTable] = useState(false);
   const [tables, setTables] = useState(null);
 
-
+  
   const getTables = useCallback(async () => {
     try {
       const {idToken} = await Auth.currentSession();
@@ -300,28 +307,24 @@ function RightSide({selectedParty}) {
                                 textAlign: 'center',
                                 pt: 3,
                                 pb: 2.5,
+                                background: selectedParty.customer.accepted? alpha(theme.colors.alpha.black[10], 0.10): '#FF6C00'
                               }}
-                            >
-                              <Typography
-                                variant="h4"
-                                sx={{
-                                  pt: 1
-                                }}
                               >
-                                {selectedParty.waitingTime || actualDate.getDate()+ '/' + parseInt(actualDate.getMonth()+1) + '/' + actualDate.getFullYear()}
-                              </Typography>
-                              { selectedParty.dateTime && 
 
-                                                <Typography
-                                                      variant="h6"
-                                                      sx={{
-                                                        pt: 1
-                                                      }}
-                                                      >
-                                                  { actualDate.getHours()+ ':' + actualDate.getMinutes()}
-                                        </Typography>
-                              }
-                     
+                                      {
+                                          selectedParty.customer.accepted?
+                                                (<Typography
+                                                  variant="h6"
+                                                  sx={{
+                                                    p: 1
+                                                  }}
+                                                >
+                                                  {selectedParty.waitingTime}
+                                                </Typography>)
+                                          :                
+                                          <AccessTimeIcon style={{ color: 'white' }}/>
+
+                                        }
                     </CardWrapper>
                 </Grid>
                 <Grid item xs={12} sm={4}>

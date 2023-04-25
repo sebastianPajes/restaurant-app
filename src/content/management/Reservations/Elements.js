@@ -21,6 +21,11 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import Text from 'src/components/Text';
 import { Link as RouterLink, useLocation} from 'react-router-dom';
 
+const CardWrapper = styled(Card)(
+  ({ theme }) => `
+      background: ${alpha(theme.colors.alpha.black[10], 0.10)};
+  `
+);
 
 const ListItemButtonWrapper = styled(ListItemButton)(
   ({ theme }) => `
@@ -99,6 +104,7 @@ function Elements({parties, handleSelectParty}) {
         <Divider />
           {
           parties?.map( p =>{
+            const actualDate = new Date(p.dateTime);
             return (<ListItemButtonWrapper
               sx={{
                 display: { xs: 'block', sm: 'flex' },
@@ -129,10 +135,40 @@ function Elements({parties, handleSelectParty}) {
                     {p.customer.partySize}
                   </Avatar>
               </ListItemAvatar>
+              <CardWrapper
+                        elevation={0}
+                              sx={{
+                                textAlign: 'center',
+                                p: 1,
+                              }}
+                            >
+                              <Typography
+                                variant="h4"
+                                sx={{
+                                  p: 1
+                                }}
+                              >
+                                {actualDate.getDate()+ '/' + parseInt(actualDate.getMonth()+1) + '/' + actualDate.getFullYear()}
+                              </Typography>
+                              { p.dateTime && 
+
+                                                <Typography
+                                                      variant="h6"
+                                                      sx={{
+                                                        pt: 1
+                                                      }}
+                                                      >
+                                                  { actualDate.getHours()+ ':' + actualDate.getMinutes()}
+                                        </Typography>
+                              }
+                     
+                    </CardWrapper>
               <ListItemText
                 disableTypography
                 primary={
-                  <Typography color="text.primary" variant="h5">
+                  <Typography color="text.primary" variant="h5" sx={{
+                    pl: 2
+                  }}>
                     {p.customer.name}
                   </Typography>
                 }
@@ -145,9 +181,10 @@ function Elements({parties, handleSelectParty}) {
                     >
                       <Typography
                         sx={{
-                          fontSize: `${theme.typography.pxToRem(12)}`
+                          fontSize: `${theme.typography.pxToRem(12)}`,
+                          pl:2
                         }}
-                        variant="subtitle2"
+                        variant="subtitle2" 
                       >
                         <Text color="success">{p.notes}</Text>
                       </Typography>

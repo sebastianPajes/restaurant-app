@@ -177,12 +177,12 @@ function Edit(){
                     xs={12}
                     sm={8}
                     md={9} >
-              <Button variant="outlined" sx={{width:'50%'}}
+                 <Button variant={partyType === "waitlist"? "contained" : "outlined"} sx={{width:'50%'}}
                 onClick ={()=> setPartyType('waitlist')}
                 >  
               Walk-in
               </Button>
-              <Button variant="outlined" sx={{width:'50%'}}
+              <Button variant={partyType === "booking"? "contained" : "outlined"} sx={{width:'50%'}}
                 onClick ={()=> setPartyType('booking')}
                 >
                 Reserva

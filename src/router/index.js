@@ -101,7 +101,7 @@ const router = [
     children: [
       {
         path: '',
-        element: <Navigate to="empleados" replace />
+        element: <Navigate to="informacion-general" replace />
       },
       {
         path: 'waitlist',

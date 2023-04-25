@@ -21,7 +21,7 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import Text from 'src/components/Text';
 import { Link as RouterLink, useLocation} from 'react-router-dom';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-
+import calculateExceededTime from 'src/utils/time';
 
 const ListItemButtonWrapper = styled(ListItemButton)(
   ({ theme }) => `
@@ -138,8 +138,7 @@ function Elements({parties, handleSelectParty}) {
                         elevation={0}
                               sx={{
                                 textAlign: 'center',
-                                pt: 3,
-                                pb: 2.5,
+                                p: 2,
                                 background: p.customer.accepted? alpha(theme.colors.alpha.black[10], 0.10): '#FF6C00'
                               }}
               >
@@ -151,7 +150,8 @@ function Elements({parties, handleSelectParty}) {
                                 p: 1
                               }}
                             >
-                              {p.waitingTime}
+                              {p.waitingTime} <br/>
+                              <span style={{ color: '#FF6C00' }}>{calculateExceededTime(p.createDate, p.waitingTime)}</span>
                             </Typography>)
                       :                
                       <AccessTimeIcon/>
@@ -161,7 +161,9 @@ function Elements({parties, handleSelectParty}) {
               <ListItemText
                 disableTypography
                 primary={
-                  <Typography color="text.primary" variant="h5">
+                  <Typography color="text.primary" variant="h5"     sx={{
+                    pl: 2
+                  }}>
                     {p.customer.name}
                   </Typography>
                 }
@@ -174,7 +176,8 @@ function Elements({parties, handleSelectParty}) {
                     >
                       <Typography
                         sx={{
-                          fontSize: `${theme.typography.pxToRem(12)}`
+                          fontSize: `${theme.typography.pxToRem(12)}`,
+                          pl: 2
                         }}
                         variant="subtitle2"
                       >

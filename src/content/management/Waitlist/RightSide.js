@@ -44,6 +44,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 import Scrollbar from 'src/components/Scrollbar';
 import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
+import calculateExceededTime from 'src/utils/time';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -238,7 +239,7 @@ function RightSide({selectedParty}) {
       const {idToken} = await Auth.currentSession();
       console.log(waitingTime);
       const response = await axios.post(`${process.env.REACT_APP_API}api/parties/${selectedParty.sk.split('#')[1].split('-')[0]}`,
-      {...selectedParty, id: selectedParty.sk.split('#')[2], waitingTime}
+      {...selectedParty, id: selectedParty.sk.split('#')[2], waitingTime, customer:{...selectedParty.customer, accepted:true}}
       ,
       {
         headers: {
@@ -319,7 +320,8 @@ function RightSide({selectedParty}) {
                                                     p: 1
                                                   }}
                                                 >
-                                                  {selectedParty.waitingTime}
+                                                  {selectedParty.waitingTime}<br/>
+                                                  <span style={{ color: '#FF6C00' }}>{calculateExceededTime(selectedParty.createDate, selectedParty.waitingTime)}</span>
                                                 </Typography>)
                                           :                
                                           <AccessTimeIcon style={{ color: 'white' }}/>

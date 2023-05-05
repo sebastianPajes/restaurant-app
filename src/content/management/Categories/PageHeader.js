@@ -20,10 +20,7 @@ import {
   Divider,
   TextField,
   CircularProgress,
-  Switch,
   Avatar,
-  Autocomplete,
-  IconButton,
   ListItem,
   ListItemText,
   Alert,
@@ -119,6 +116,7 @@ const ButtonUploadWrapper = styled(Box)(
 function PageHeader({handleAddCategory}) {
   
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [image, setImage] = useState(null);
 
   const onDrop = useCallback((acceptedFiles, rejectFiles)=>{
@@ -164,9 +162,15 @@ function PageHeader({handleAddCategory}) {
   const handleCreateUserOpen = () => {
     setOpen(true);
   };
+  const handleEditUserOpen = () => {
+    setEditOpen(true);
+  };
 
   const handleCreateUserClose = () => {
     setOpen(false);
+  };
+  const handleEditUserClose = () => {
+    setEditOpen(false);
   };
 
   const handleCreateUserSuccess = (newCategory) => {
@@ -257,6 +261,271 @@ function PageHeader({handleAddCategory}) {
               }
               const response = await axios.post(`${process.env.REACT_APP_API}api/categories`,
                 newCategory,
+              {
+                headers: {
+                  Authorization : `Bearer ${idToken.jwtToken}`
+                  }
+                }
+              );
+              resetForm();
+              setStatus({ success: true });
+              setSubmitting(false);
+              handleCreateUserSuccess(response.data.categoryRes);
+            } catch (err) {
+              console.error(err);
+              setStatus({ success: false });
+              setErrors({ submit: err.message });
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({
+            errors,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+            values
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <DialogContent
+                dividers
+                sx={{
+                  p: 3
+                }}
+              >
+                <Grid container spacing={0}>
+                  <Grid  item
+                    xs={12}
+                    sm={4}
+                    md={3}
+                    justifyContent="flex-end"
+                    textAlign={{ sm: 'right' }}>
+                        <Box
+                        pr={3}
+                        sx={{
+                          pt: `${theme.spacing(2)}`,
+                          pb: { xs: 1, md: 0 }
+                        }}
+                        alignSelf="center"
+                      >
+                        <b>Nombre:</b>
+                      </Box>
+                    </Grid>
+                    <Grid
+                    sx={{
+                      mb: `${theme.spacing(3)}`
+                    }}
+                    item
+                    xs={12}
+                    sm={8}
+                    md={9}
+                  >
+                        <TextField
+                          error={Boolean(
+                            touched.name && errors.name
+                          )}
+                          fullWidth
+                          helperText={touched.name && errors.name}
+                          label="Nombre"
+                          name="name"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value={values.name}
+                          variant="outlined"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                            <Box
+                            pr={3}
+                            sx={{
+                              pb: { xs: 1, md: 0 }
+                            }}
+                          >
+                            <b>Descripción:</b>
+                          </Box>
+                    </Grid>
+                    <Grid
+                        sx={{
+                          mb: `${theme.spacing(3)}`
+                        }}
+                        item
+                        xs={12}
+                        sm={8}
+                        md={9}
+                      >
+                        <TextField
+                          error={Boolean(touched.description && errors.description)}
+                          fullWidth
+                          helperText={touched.description && errors.description}
+                          label="Descripción"
+                          name="description"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value={values.description}
+                          variant="outlined"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                      <Box
+                        pr={3}
+                        sx={{
+                          pb: { xs: 1, md: 0 }
+                        }}
+                      >
+                        <b>Imagen:</b>
+                      </Box>
+                    </Grid>
+                  <Grid
+                    sx={{
+                      mb: `${theme.spacing(3)}`
+                    }}
+                    item
+                    xs={12}
+                    sm={8}
+                    md={9}
+                  >
+                    <BoxUploadWrapper {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {isDragAccept && (
+                        <>
+                          <AvatarSuccess variant="rounded">
+                            <CheckTwoToneIcon />
+                          </AvatarSuccess>
+                          <Typography
+                            sx={{
+                              mt: 2
+                            }}
+                          >
+                            {t('Drop the files to start uploading')}
+                          </Typography>
+                        </>
+                      )}
+                      {isDragReject && (
+                        <>
+                          <AvatarDanger variant="rounded">
+                            <CloseTwoToneIcon />
+                          </AvatarDanger>
+                          <Typography
+                            sx={{
+                              mt: 2
+                            }}
+                          >
+                            {t('You cannot upload these file types')}
+                          </Typography>
+                        </>
+                      )}
+                      {!isDragActive && (
+                        <>
+                          <AvatarWrapper variant="rounded">
+                            <CloudUploadTwoToneIcon />
+                          </AvatarWrapper>
+                          <Typography
+                            sx={{
+                              mt: 2
+                            }}
+                          >
+                            Arrastra y deja tu imagen aquí
+                          </Typography>
+                        </>
+                      )}
+                    </BoxUploadWrapper>
+                    {files.length > 0 && (
+                      <>
+                        <Alert
+                          sx={{
+                            py: 0,
+                            mt: 2
+                          }}
+                          severity="success"
+                        >
+                          {"Has subido"} <b>{files.length}</b>{' '}
+                          {"imágene(s)"}!
+                        </Alert>
+                        <Divider
+                          sx={{
+                            mt: 2
+                          }}
+                        />
+                        <List disablePadding component="div">
+                          {files}
+                        </List>
+                      </>
+                    )}
+                  </Grid>
+                </Grid>
+              </DialogContent>
+              <DialogActions
+                sx={{
+                  p: 3
+                }}
+              >
+                <Button color="secondary" onClick={handleCreateUserClose}>
+                  Cancelar
+                </Button>
+                <Button
+                  type="submit"
+                  startIcon={
+                    isSubmitting ? <CircularProgress size="1rem" /> : null
+                  }
+                  disabled={Boolean(errors.submit) || isSubmitting}
+                  variant="contained"
+                >
+                  Agregar
+                </Button>
+              </DialogActions>
+            </form>
+          )}
+        </Formik>
+      </Dialog>
+      <Dialog
+        fullWidth
+        maxWidth="md"
+        open={editOpen}
+        onClose={handleEditUserClose}
+      >
+        <DialogTitle
+          sx={{
+            p: 3
+          }}
+        >
+          <Typography variant="h4" gutterBottom>
+            Editar categoría
+          </Typography>
+        </DialogTitle>
+        <Formik
+          initialValues={{
+            name: '',
+            description: '',
+            submit: null
+          }}
+          onSubmit={async (
+            _values,
+            { resetForm, setErrors, setStatus, setSubmitting }
+          ) => {
+            try {
+              const {idToken} = await Auth.currentSession();
+              
+              //S3 code
+              const s3SignedURL = undefined//await axios.get(`${process.env.REACT_APP_API}api/uploads/${acceptedFiles[0]?.name}`,
+              // {
+              //   headers: {
+              //     Authorization : `Bearer ${idToken.jwtToken}`
+              //     }
+              //   }
+              // );
+             // // let binary = atob(image.split(',')[1])
+              // let array = []
+              // for (var i = 0; i < binary.length; i++) {
+              //   array.push(binary.charCodeAt(i))
+             // // }
+              // console.log(s3SignedURL);
+              // let blobData = new Blob([new Uint8Array(image)], {type: acceptedFiles[0]?.type})
+              // const s3Response = await axios.put(s3SignedURL.uploadURL, blobData);
+              const selectedCategory= {}
+              const response = await axios.post(`${process.env.REACT_APP_API}api/categories`,
+                selectedCategory,
               {
                 headers: {
                   Authorization : `Bearer ${idToken.jwtToken}`

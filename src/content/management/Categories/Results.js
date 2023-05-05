@@ -45,6 +45,10 @@ import Text from 'src/components/Text';
 import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartmentTwoTone';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import '../../../components/toggle.css'
+
+import { Auth } from 'aws-amplify';
+import axios from 'axios';
+
 const DialogWrapper = styled(Dialog)(
   () => `
       .MuiDialog-paper {
@@ -117,6 +121,7 @@ const applyPagination = (products, page, limit) => {
 
 const Results = ({ categories }) => {
   const [selectedItems, setSelectedProducts] = useState([]);
+  const [ selectedCategory, setSelectedCategory] = useState(null)
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
@@ -178,8 +183,16 @@ const Results = ({ categories }) => {
     setOpenConfirmDelete(false);
   };
 
-  const handleDeleteCompleted = () => {
+  const handleDeleteCompleted = async() => {
+    console.log(selectedCategory)
     setOpenConfirmDelete(false);
+    const {idToken} = await Auth.currentSession();
+    const response = await axios.delete(`${process.env.REACT_APP_API}api/categories/${selectedCategory.sk.split('#')[1]}`,
+    { 
+      headers: {
+        Authorization : `Bearer ${idToken.jwtToken}`
+        }
+    });
 
     enqueueSnackbar("Se ha borrado exitosamente la categoría", {
       variant: 'success',
@@ -189,6 +202,8 @@ const Results = ({ categories }) => {
       },
       TransitionComponent: Zoom
     });
+
+    window.location.reload(false);
   };
 
   const handleVisibility = () => {
@@ -334,8 +349,11 @@ const Results = ({ categories }) => {
                             </Tooltip> */}
                             <Tooltip title="Eliminar" arrow>
                               <IconButton
-                                onClick={handleConfirmDelete}
                                 color="primary"
+                                onClick={() => {
+                                  handleConfirmDelete()
+                                  setSelectedCategory(product)}
+                                }
                               >
                                 <DeleteTwoToneIcon fontSize="medium" />
                               </IconButton>
@@ -405,7 +423,7 @@ const Results = ({ categories }) => {
               Cancelar
             </Button>
             <ButtonError
-              onClick={handleDeleteCompleted}
+              onClick={handleDeleteCompleted }
               size="large"
               sx={{
                 mx: 1,

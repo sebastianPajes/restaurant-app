@@ -9,11 +9,11 @@ import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
 const menuItems = [
   {
     items: [
-      {
-        name: 'Usuarios activos',
-        icon: PeopleOutlineOutlinedIcon,
-        link: 'usuarios-activos',
-      },
+      // {
+      //   name: 'Usuarios activos',
+      //   icon: PeopleOutlineOutlinedIcon,
+      //   link: 'usuarios-activos',
+      // },
       {
         name: 'Lista de espera',
         icon: HourglassEmptyOutlinedIcon,
@@ -39,11 +39,11 @@ const menuItems = [
         icon: HistoryOutlinedIcon,
         link: 'historial',
       },
-      {
-        name: 'Reportes',
-        icon: AssessmentOutlinedIcon,
-        link: 'reportes',
-      },
+      // {
+      //   name: 'Reportes',
+      //   icon: AssessmentOutlinedIcon,
+      //   link: 'reportes',
+      // },
     ],
   },
 ];

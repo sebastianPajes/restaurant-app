@@ -42,6 +42,9 @@ import { useSnackbar } from 'notistack';
 import Text from 'src/components/Text';
 import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartmentTwoTone';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+import { Auth } from 'aws-amplify';
+import axios from 'axios';
+
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -115,6 +118,7 @@ const applyPagination = (products, page, limit) => {
 
 const Results = ({ products, categories}) => {
   const [selectedItems, setSelectedProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
@@ -171,9 +175,16 @@ const Results = ({ products, categories}) => {
     setOpenConfirmDelete(false);
   };
 
-  const handleDeleteCompleted = () => {
+  const handleDeleteCompleted = async() => {
+    console.log(`${selectedProduct.sk.split('/')[1].split('#')[1]}?categoryId=${selectedProduct.sk.split('/')[0].split('#')[1]}`)
     setOpenConfirmDelete(false);
-
+    const {idToken} = await Auth.currentSession();
+    const response = await axios.delete(`${process.env.REACT_APP_API}api/products/${selectedProduct.sk.split('/')[1].split('#')[1]}?categoryId=${selectedProduct.sk.split('/')[0].split('#')[1]}`,
+    {
+      headers: {
+        Authorization : `Bearer ${idToken.jwtToken}`
+        }
+    });
     enqueueSnackbar("Se ha eliminado exitosamente el producto", {
       variant: 'success',
       anchorOrigin: {
@@ -182,6 +193,8 @@ const Results = ({ products, categories}) => {
       },
       TransitionComponent: Zoom
     });
+    window.location.reload(false);
+
   };
 
   const handleEditProduct = () => {
@@ -340,8 +353,11 @@ const Results = ({ products, categories}) => {
                           </Tooltip> */}
                           <Tooltip title="Eliminar" arrow>
                             <IconButton
-                              onClick={handleConfirmDelete}
                               color="primary"
+                              onClick={() => {
+                                handleConfirmDelete()
+                                setSelectedProduct(product)}
+                              }
                             >
                               <DeleteTwoToneIcon fontSize="medium" />
                             </IconButton>

@@ -743,7 +743,7 @@ const Results = ({ categories }) => {
                   disabled={Boolean(errors.submit) || isSubmitting}
                   variant="contained"
                 >
-                  Agregar
+                  Editar
                 </Button>
               </DialogActions>
             </form>

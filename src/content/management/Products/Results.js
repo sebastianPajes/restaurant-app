@@ -35,6 +35,7 @@ import {
   ListItemText,
   Alert,
   List,
+  Autocomplete,
   styled
 } from '@mui/material';
 
@@ -174,6 +175,7 @@ const applyPagination = (products, page, limit) => {
 
 const Results = ({ products, categories}) => {
   const [selectedItems, setSelectedProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [image, setImage] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -302,7 +304,16 @@ const Results = ({ products, categories}) => {
   };
 
   const handleEditProduct = () => {
+    enqueueSnackbar("Se ha editado exitosamente el producto", {
+      variant: 'success',
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      },
+      TransitionComponent: Zoom
+    });
 
+    window.location.reload(false);
   };
 
   return (
@@ -443,7 +454,9 @@ const Results = ({ products, categories}) => {
                             }}
                             onClick={() => {
                                 setSelectedProduct(product)
-                                handleConfirmDelete()
+                                const categoryy = categories.find(c => c.sk.split('#')[1] === product.sk.split('/')[0].split('#')[1]);
+                                setSelectedCategory(categoryy)
+                                handleEditUserOpen()
                               }
                             }
                             variant="contained"
@@ -523,8 +536,8 @@ const Results = ({ products, categories}) => {
               const {idToken} = await Auth.currentSession();
               const editedProduct = {
                 ...selectedProduct,
-                id: selectedProduct.sk.split('#')[1],
-                categoryId: selectedProduct.sk.split('#')[1],
+                id: selectedProduct.sk.split('/')[1].split('#')[1],
+                categoryId: selectedCategory.sk.split('#')[1],
                 name: _values.name,
                 description: _values.description,
                 price: _values.price
@@ -606,7 +619,54 @@ const Results = ({ products, categories}) => {
                           variant="outlined"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                    <Grid
+                    item
+                    xs={12}
+                    sm={4}
+                    md={3}
+                    justifyContent="flex-end"
+                    textAlign={{ sm: 'right' }}
+                  >
+                    <Box
+                      pr={3}
+                      sx={{
+                        pt: `${theme.spacing(2)}`,
+                        pb: { xs: 1, md: 0 }
+                      }}
+                      alignSelf="center"
+                    >
+                      <b>Categoría:</b>
+                    </Box>
+                  </Grid>
+                  <Grid
+                    sx={{
+                      mb: `${theme.spacing(3)}`
+                    }}
+                    item
+                    xs={12}
+                    sm={8}
+                    md={9}
+                  >
+                    <Autocomplete
+                      sx={{
+                        m: 0
+                      }}
+                      limitTags={2}
+                      getOptionLabel={(option) => option.name}
+                      options={categories}
+                      value={selectedCategory}
+                      onChange={(event,newValue)=> setSelectedCategory(newValue)}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          variant="outlined"
+                          placeholder="Selecciona una categoría para el producto"
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
                             <Box
                             pr={3}
                             sx={{
@@ -742,7 +802,7 @@ const Results = ({ products, categories}) => {
                   disabled={Boolean(errors.submit) || isSubmitting}
                   variant="contained"
                 >
-                  Agregar
+                  Editar
                 </Button>
               </DialogActions>
             </form>

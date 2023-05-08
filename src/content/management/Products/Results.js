@@ -1,18 +1,21 @@
-import { useState, forwardRef } from 'react';
+import { useCallback, useState, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import numeral from 'numeral';
+import { Formik } from 'formik';
 
 import {
   Avatar,
   Box,
   Card,
-  Checkbox,
   Slide,
+  CircularProgress,
+  Grid,
   Divider,
   Tooltip,
   IconButton,
-  Link,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
   InputAdornment,
   Table,
   TableBody,
@@ -28,22 +31,75 @@ import {
   useMediaQuery,
   useTheme,
   Zoom,
+  ListItem,
+  ListItemText,
+  Alert,
+  List,
   styled
 } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/Close';
 
 import { useTranslation } from 'react-i18next';
-import LaunchTwoToneIcon from '@mui/icons-material/LaunchTwoTone';
-import Label from 'src/components/Label';
 import BulkActions from './BulkActions';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useSnackbar } from 'notistack';
-import Text from 'src/components/Text';
-import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartmentTwoTone';
+import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
+import CloudUploadTwoToneIcon from '@mui/icons-material/CloudUploadTwoTone';
+import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { Auth } from 'aws-amplify';
 import axios from 'axios';
+
+import { useDropzone } from 'react-dropzone';
+
+const AvatarSuccess = styled(Avatar)(
+  ({ theme }) => `
+    background: ${theme.colors.success.light};
+    width: ${theme.spacing(7)};
+    height: ${theme.spacing(7)};
+`
+);
+
+const AvatarDanger = styled(Avatar)(
+  ({ theme }) => `
+    background: ${theme.colors.error.light};
+    width: ${theme.spacing(7)};
+    height: ${theme.spacing(7)};
+`
+);
+
+const BoxUploadWrapper = styled(Box)(
+  ({ theme }) => `
+    border-radius: ${theme.general.borderRadius};
+    padding: ${theme.spacing(2)};
+    background: ${theme.colors.alpha.black[5]};
+    border: 1px dashed ${theme.colors.alpha.black[30]};
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: ${theme.transitions.create(['border', 'background'])};
+
+    &:hover {
+      background: ${theme.colors.alpha.white[50]};
+      border-color: ${theme.colors.primary.main};
+    }
+`
+);
+
+const AvatarWrapper = styled(Box)(
+  ({ theme }) => `
+
+    position: relative;
+
+    .MuiAvatar-root {
+      width: ${theme.spacing(16)};
+      height: ${theme.spacing(16)};
+    }
+`
+);
 
 
 const DialogWrapper = styled(Dialog)(
@@ -118,6 +174,8 @@ const applyPagination = (products, page, limit) => {
 
 const Results = ({ products, categories}) => {
   const [selectedItems, setSelectedProducts] = useState([]);
+  const [editOpen, setEditOpen] = useState(false);
+  const [image, setImage] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
@@ -128,9 +186,55 @@ const Results = ({ products, categories}) => {
   const [limit, setLimit] = useState(5);
   const [query, setQuery] = useState('');
 
+
+  
+  const onDrop = useCallback((acceptedFiles, rejectFiles)=>{
+    acceptedFiles.forEach(file =>{
+      const reader = new FileReader();
+      reader.onload = (e) => {
+       setImage(e.target.result);
+      }
+      reader.readAsDataURL(file);
+    });
+
+  });
+
+  const {
+    acceptedFiles,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+    getRootProps,
+    getInputProps
+  } = useDropzone({
+    accept: {
+      'image/png': ['.png'],
+      'image/jpeg': ['.jpg']
+    },
+    onDrop
+  });
+
+  const files = acceptedFiles.map((file, index) => (
+    <ListItem disableGutters component="div" key={index}>
+      <ListItemText primary={file.name} />
+      <b>{file.size} bytes</b>
+      <Divider />
+    </ListItem>
+  ));
+
+
   const handleQueryChange = (event) => {
     event.persist();
     setQuery(event.target.value);
+  };
+
+  
+  const handleEditUserOpen = () => {
+    setEditOpen(true);
+  };
+
+  const handleEditUserClose = () => {
+    setEditOpen(false);
   };
 
   const handleSelectAllProducts = (event) => {
@@ -337,7 +441,11 @@ const Results = ({ products, categories}) => {
                             sx={{
                               mt: { xs: 2, sm: 0 }
                             }}
-                            onClick={handleEditProduct}
+                            onClick={() => {
+                                setSelectedProduct(product)
+                                handleConfirmDelete()
+                              }
+                            }
                             variant="contained"
                           >
                             Editar
@@ -385,6 +493,262 @@ const Results = ({ products, categories}) => {
         </>
         )}
       </Card>
+      <Dialog
+        fullWidth
+        maxWidth="md"
+        open={editOpen}
+        onClose={handleEditUserClose}
+      >
+        <DialogTitle
+          sx={{
+            p: 3
+          }}
+        >
+          <Typography variant="h4" gutterBottom>
+            Editar producto
+          </Typography>
+        </DialogTitle>
+        <Formik
+          initialValues={{
+            name: selectedProduct?.name,
+            description: selectedProduct?.description,
+            price:selectedProduct?.price,
+            submit: null
+          }}
+          onSubmit={async (
+            _values,
+            { resetForm, setErrors, setStatus, setSubmitting }
+          ) => {
+            try {
+              const {idToken} = await Auth.currentSession();
+              const editedProduct = {
+                ...selectedProduct,
+                id: selectedProduct.sk.split('#')[1],
+                categoryId: selectedProduct.sk.split('#')[1],
+                name: _values.name,
+                description: _values.description,
+                price: _values.price
+              }
+              const response = await axios.put(`${process.env.REACT_APP_API}api/products`,
+                editedProduct,
+              {
+                headers: {
+                  Authorization : `Bearer ${idToken.jwtToken}`
+                  }
+                }
+              );
+              resetForm();
+              setStatus({ success: true });
+              setSubmitting(false);
+              handleEditProduct();
+            } catch (err) {
+              console.error(err);
+              setStatus({ success: false });
+              setErrors({ submit: err.message });
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({
+            errors,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+            values
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <DialogContent
+                dividers
+                sx={{
+                  p: 3
+                }}
+              >
+                <Grid container spacing={0}>
+                  <Grid  item
+                    xs={12}
+                    sm={4}
+                    md={3}
+                    justifyContent="flex-end"
+                    textAlign={{ sm: 'right' }}>
+                        <Box
+                        pr={3}
+                        sx={{
+                          pt: `${theme.spacing(2)}`,
+                          pb: { xs: 1, md: 0 }
+                        }}
+                        alignSelf="center"
+                      >
+                        <b>Nombre:</b>
+                      </Box>
+                    </Grid>
+                    <Grid
+                    sx={{
+                      mb: `${theme.spacing(3)}`
+                    }}
+                    item
+                    xs={12}
+                    sm={8}
+                    md={9}
+                  >
+                        <TextField
+                          error={Boolean(
+                            touched.name && errors.name
+                          )}
+                          fullWidth
+                          helperText={touched.name && errors.name}
+                          label="Nombre"
+                          name="name"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value={values.name}
+                          variant="outlined"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                            <Box
+                            pr={3}
+                            sx={{
+                              pb: { xs: 1, md: 0 }
+                            }}
+                          >
+                            <b>Descripción:</b>
+                          </Box>
+                    </Grid>
+                    <Grid
+                        sx={{
+                          mb: `${theme.spacing(3)}`
+                        }}
+                        item
+                        xs={12}
+                        sm={8}
+                        md={9}
+                      >
+                        <TextField
+                          error={Boolean(touched.description && errors.description)}
+                          fullWidth
+                          helperText={touched.description && errors.description}
+                          label="Descripción"
+                          name="description"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value={values.description}
+                          variant="outlined"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                      <Box
+                        pr={3}
+                        sx={{
+                          pb: { xs: 1, md: 0 }
+                        }}
+                      >
+                        <b>Imagen:</b>
+                      </Box>
+                    </Grid>
+                  <Grid
+                    sx={{
+                      mb: `${theme.spacing(3)}`
+                    }}
+                    item
+                    xs={12}
+                    sm={8}
+                    md={9}
+                  >
+                    <BoxUploadWrapper {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {isDragAccept && (
+                        <>
+                          <AvatarSuccess variant="rounded">
+                            <CheckTwoToneIcon />
+                          </AvatarSuccess>
+                          <Typography
+                            sx={{
+                              mt: 2
+                            }}
+                          >
+                            {t('Drop the files to start uploading')}
+                          </Typography>
+                        </>
+                      )}
+                      {isDragReject && (
+                        <>
+                          <AvatarDanger variant="rounded">
+                            <CloseTwoToneIcon />
+                          </AvatarDanger>
+                          <Typography
+                            sx={{
+                              mt: 2
+                            }}
+                          >
+                            {t('You cannot upload these file types')}
+                          </Typography>
+                        </>
+                      )}
+                      {!isDragActive && (
+                        <>
+                          <AvatarWrapper variant="rounded">
+                            <CloudUploadTwoToneIcon />
+                          </AvatarWrapper>
+                          <Typography
+                            sx={{
+                              mt: 2
+                            }}
+                          >
+                            Arrastra y deja tu imagen aquí
+                          </Typography>
+                        </>
+                      )}
+                    </BoxUploadWrapper>
+                    {files.length > 0 && (
+                      <>
+                        <Alert
+                          sx={{
+                            py: 0,
+                            mt: 2
+                          }}
+                          severity="success"
+                        >
+                          {"Has subido"} <b>{files.length}</b>{' '}
+                          {"imágene(s)"}!
+                        </Alert>
+                        <Divider
+                          sx={{
+                            mt: 2
+                          }}
+                        />
+                        <List disablePadding component="div">
+                          {files}
+                        </List>
+                      </>
+                    )}
+                  </Grid>
+                </Grid>
+              </DialogContent>
+              <DialogActions
+                sx={{
+                  p: 3
+                }}
+              >
+                <Button color="secondary" onClick={handleEditUserClose}>
+                  Cancelar
+                </Button>
+                <Button
+                  type="submit"
+                  startIcon={
+                    isSubmitting ? <CircularProgress size="1rem" /> : null
+                  }
+                  disabled={Boolean(errors.submit) || isSubmitting}
+                  variant="contained"
+                >
+                  Agregar
+                </Button>
+              </DialogActions>
+            </form>
+          )}
+        </Formik>
+      </Dialog>
       <DialogWrapper
         open={openConfirmDelete}
         maxWidth="sm"

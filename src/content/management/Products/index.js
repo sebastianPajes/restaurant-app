@@ -23,6 +23,7 @@ function ManagementProducts() {
           Authorization : `Bearer ${idToken.jwtToken}`
           }
       });
+      // response.data = response.data.filter(c => c.isVisibleInMenu === true) if u want to just show visible categories
      
       if (isMountedRef.current) {
         setCategories(response.data);

@@ -318,9 +318,33 @@ const Results = ({ categories }) => {
     window.location.reload(false);
   };
 
-  const handleVisibility = () => {
-    //update visi;
-   }
+  const handleVisibility = async(selectedCategory) => {
+    const {idToken} = await Auth.currentSession();
+    const editedCategory = {
+      ...selectedCategory,
+      id: selectedCategory.sk.split('#')[1],
+      isVisibleInMenu: !selectedCategory.isVisibleInMenu
+    }
+    const response = await axios.put(`${process.env.REACT_APP_API}api/categories`,
+      editedCategory,
+    {
+      headers: {
+        Authorization : `Bearer ${idToken.jwtToken}`
+        }
+      }
+    );
+
+    enqueueSnackbar("Se ha cambiado la visibilidad de la categoría exitosamente", {
+      variant: 'success',
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      },
+      TransitionComponent: Zoom
+    });
+
+
+  }
   return (
     <>
       <Card>
@@ -437,7 +461,12 @@ const Results = ({ categories }) => {
                               <Toggle
                                 defaultChecked={product.isVisibleInMenu}
                                 icons={false}
-                                onChange={handleVisibility} />
+                                onChange={
+                                  () =>{
+                                    setSelectedCategory(product)
+                                    handleVisibility(product)
+                                  }
+                                } />
                         </TableCell>
                         <TableCell align="center">
                           <Typography noWrap>
